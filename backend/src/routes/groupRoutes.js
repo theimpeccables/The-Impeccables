@@ -1,0 +1,22 @@
+import { Router } from 'express';
+import { body, param } from 'express-validator';
+import { requireAuth } from '../middleware/auth.js';
+import { validateRequest } from '../middleware/validateRequest.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+import { addGroupMembers, cancelJoinRequest, createGroup, decideJoinRequest, leaveGroup, listGroupMembers, listGroupRequests, listGroups, removeGroupMember, requestToJoin, updateGroup, updateGroupMember } from '../controllers/groupController.js';
+
+const router = Router();
+router.use(requireAuth);
+router.get('/', asyncHandler(listGroups));
+router.post('/', body('name').isString().trim().isLength({ min: 2, max: 80 }), body('type').optional().isIn(['domain', 'core', 'custom']), body('description').optional().isString().trim().isLength({ max: 500 }), body('acceptsRequests').optional().isBoolean().toBoolean(), validateRequest, asyncHandler(createGroup));
+router.patch('/:groupId', param('groupId').isMongoId(), body('name').optional().isString().trim().isLength({ min: 2, max: 80 }), body('description').optional().isString().trim().isLength({ max: 500 }), body('acceptsRequests').optional().isBoolean().toBoolean(), body('isArchived').optional().isBoolean().toBoolean(), validateRequest, asyncHandler(updateGroup));
+router.get('/:groupId/members', param('groupId').isMongoId(), validateRequest, asyncHandler(listGroupMembers));
+router.post('/:groupId/members', param('groupId').isMongoId(), body('userIds').isArray({ min: 1, max: 500 }), body('userIds.*').isMongoId(), validateRequest, asyncHandler(addGroupMembers));
+router.patch('/:groupId/members/:userId', param('groupId').isMongoId(), param('userId').isMongoId(), body('role').isIn(['member', 'lead']), validateRequest, asyncHandler(updateGroupMember));
+router.delete('/:groupId/members/:userId', param('groupId').isMongoId(), param('userId').isMongoId(), validateRequest, asyncHandler(removeGroupMember));
+router.get('/:groupId/requests', param('groupId').isMongoId(), validateRequest, asyncHandler(listGroupRequests));
+router.post('/:groupId/requests', param('groupId').isMongoId(), body('message').optional().isString().trim().isLength({ max: 500 }), validateRequest, asyncHandler(requestToJoin));
+router.delete('/requests/:requestId', param('requestId').isMongoId(), validateRequest, asyncHandler(cancelJoinRequest));
+router.patch('/requests/:requestId', param('requestId').isMongoId(), body('status').isIn(['approved', 'rejected']), validateRequest, asyncHandler(decideJoinRequest));
+router.delete('/:groupId/leave', param('groupId').isMongoId(), validateRequest, asyncHandler(leaveGroup));
+export default router;

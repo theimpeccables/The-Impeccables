@@ -1,0 +1,18 @@
+const write = (level, message, fields = {}) => {
+  const entry = {
+    timestamp: new Date().toISOString(),
+    level,
+    message,
+    ...fields,
+  };
+  const output = JSON.stringify(entry);
+  if (level === 'error') console.error(output);
+  else if (level === 'warn') console.warn(output);
+  else console.info(output);
+};
+
+export const logger = Object.freeze({
+  info: (message, fields) => write('info', message, fields),
+  warn: (message, fields) => write('warn', message, fields),
+  error: (message, fields) => write('error', message, fields),
+});

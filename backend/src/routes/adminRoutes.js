@@ -1,0 +1,26 @@
+import { Router } from 'express';
+import { body, param, query } from 'express-validator';
+import { requireAuth, requirePermission } from '../middleware/auth.js';
+import { validateRequest } from '../middleware/validateRequest.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+import { getAdminOverview, generateWeeklyReport, getSystemSettings, listAdminDomains, listAuditLogs, listReports, updateSystemSetting } from '../controllers/adminController.js';
+import { createAchievement, createAnnouncement, createEvent, listAdminEvents, updateDomain, updateEvent } from '../controllers/contentAdminController.js';
+
+const router = Router();
+router.get('/admin/overview', requireAuth, requirePermission('report:view'), asyncHandler(getAdminOverview));
+router.get('/admin/audit-logs', requireAuth, requirePermission('audit:view'), query('page').optional().isInt({ min: 1 }), query('limit').optional().isInt({ min: 1, max: 100 }), query('action').optional().isString().trim().isLength({ max: 120 }), query('resourceType').optional().isString().trim().isLength({ max: 80 }), validateRequest, asyncHandler(listAuditLogs));
+router.get('/admin/reports', requireAuth, requirePermission('report:view'), asyncHandler(listReports));
+router.post('/admin/reports/weekly', requireAuth, requirePermission('report:generate'), asyncHandler(generateWeeklyReport));
+router.get('/admin/settings', requireAuth, requirePermission('settings:view'), asyncHandler(getSystemSettings));
+router.get('/admin/domains', requireAuth, requirePermission('domain:manage'), asyncHandler(listAdminDomains));
+router.patch('/admin/settings/:key', requireAuth, requirePermission('settings:manage'), param('key').matches(/^(club|content|notifications|automation)\.[a-z0-9_.-]{1,100}$/), body('value').custom((value) => ['string', 'number', 'boolean'].includes(typeof value) && (typeof value !== 'string' || value.length <= 1000)), body('description').optional().isString().trim().isLength({ max: 500 }), validateRequest, asyncHandler(updateSystemSetting));
+
+const eventFields = [body('title').isString().trim().isLength({ min: 2, max: 180 }), body('description').optional().isString().trim().isLength({ max: 5000 }), body('eventType').optional().isIn(['festival', 'workshop', 'competition', 'exhibition', 'meetup', 'celebration', 'other']), body('date').optional({ values: 'null' }).isISO8601().toDate(), body('endDate').optional({ values: 'null' }).isISO8601().toDate(), body('venue').optional().isString().trim().isLength({ max: 240 }), body('posterImage').optional().isURL({ protocols: ['https'], require_protocol: true }).isLength({ max: 2048 }), body('registrationLink').optional().isURL({ protocols: ['https'], require_protocol: true }).isLength({ max: 2048 }), body('domains').optional().isArray({ max: 7 }), body('domains.*').optional().isMongoId(), body('isPublished').optional().isBoolean().toBoolean()];
+router.get('/admin/events', requireAuth, requirePermission('event:list'), asyncHandler(listAdminEvents));
+router.post('/admin/events', requireAuth, requirePermission('event:create'), ...eventFields, validateRequest, asyncHandler(createEvent));
+router.put('/admin/events/:id', requireAuth, requirePermission('event:edit'), param('id').isMongoId(), ...eventFields, validateRequest, asyncHandler(updateEvent));
+router.post('/admin/announcements', requireAuth, requirePermission('announcement:create'), body('title').isString().trim().isLength({ min: 2, max: 180 }), body('content').isString().trim().isLength({ min: 2, max: 5000 }), body('summary').optional().isString().trim().isLength({ max: 500 }), body('targetAudience').optional().isIn(['public', 'members', 'specific_domain']), body('targetDomain').optional({ values: 'falsy' }).isMongoId(), body('channels').optional().isArray({ min: 1, max: 2 }), body('channels.*').optional().isIn(['in_app', 'email']), body('isPublished').optional().isBoolean().toBoolean(), validateRequest, asyncHandler(createAnnouncement));
+router.post('/admin/achievements', requireAuth, requirePermission('achievement:manage'), body('title').isString().trim().isLength({ min: 2, max: 180 }), body('description').optional().isString().trim().isLength({ max: 3000 }), body('category').optional().isString().trim().isLength({ max: 100 }), body('awardedAt').optional({ values: 'null' }).isISO8601().toDate(), body('imageUrl').optional().isURL({ protocols: ['https'], require_protocol: true }).isLength({ max: 2048 }), body('isPublished').optional().isBoolean().toBoolean(), validateRequest, asyncHandler(createAchievement));
+router.patch('/admin/domains/:id', requireAuth, requirePermission('domain:manage'), param('id').isMongoId(), body('name').optional().isString().trim().isLength({ min: 2, max: 100 }), body('description').optional().isString().trim().isLength({ max: 2000 }), body('sortOrder').optional().isInt({ min: 0, max: 1000 }).toInt(), body('isActive').optional().isBoolean().toBoolean(), body('approvalConfig').optional().isObject(), body('approvalConfig.requiredApprovals').optional().isInt({ min: 1, max: 10 }).toInt(), body('approvalConfig.selfApprovalAllowed').optional().isBoolean().toBoolean(), body('approvalConfig.escalationHours').optional().isInt({ min: 1, max: 720 }).toInt(), validateRequest, asyncHandler(updateDomain));
+
+export default router;

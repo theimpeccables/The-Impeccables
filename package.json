@@ -1,0 +1,16 @@
+{
+  "name": "theimpeccables-platform",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The Impeccables club website and management platform",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "build": "npm --prefix frontend run build",
+    "lint": "npm --prefix frontend run lint && npm --prefix frontend exec eslint -- --config frontend/eslint.config.js backend/src",
+    "test": "npm --prefix backend test",
+    "start:backend": "npm --prefix backend run start"
+  }
+}
