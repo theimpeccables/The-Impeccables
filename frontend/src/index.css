@@ -661,6 +661,18 @@
   content: '';
   box-shadow: 0 0 10px rgba(255,42,42,.75);
 }
+.meeting-page-banner {
+  background: linear-gradient(90deg, rgba(5,5,5,.94), rgba(8,8,11,.78) 58%, rgba(5,5,5,.88)), url('/assets/backgrounds/red-black-gradient.png') right center / cover no-repeat;
+}
+.meeting-list-card {
+  background: linear-gradient(135deg, rgba(255,255,255,.035), rgba(255,255,255,.018));
+}
+.meeting-list-card:hover { border-color: rgba(255,42,42,.32); }
+.meeting-date-tile { box-shadow: inset 0 0 18px rgba(255,42,42,.035); }
+.meeting-detail-hero {
+  background: linear-gradient(120deg, rgba(255,255,255,.035), rgba(255,42,42,.035)), #09090b;
+}
+.meeting-detail-summary { background: rgba(255,255,255,.025); }
 @media (max-width: 767px) {
   .auth-scene__frame { width: 115px; opacity: .24; }
   .auth-scene__frame--left { left: -2.75rem; bottom: 1.5rem; }
