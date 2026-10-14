@@ -8,6 +8,7 @@ Branch: `ui-redesign`
 | --- | --- | --- |
 | Frontend ESLint | Pass | `npm run lint` completed successfully after each page group. |
 | Frontend production build | Pass with warning | `npm run build` succeeds. Vite reports the existing large chunks for `CircularPortal3D` (about 532 kB) and the main entry (about 687 kB). |
+| Legacy accent scan | Pass | No purple, violet, blue, cyan, or fuchsia utility classes remain under `frontend/src`. |
 | Backend test suite | Pass | `npm test`: 7 passed, 0 failed. The first sandboxed run could not bind loopback (`EPERM`); the approved rerun passed all seven tests. |
 | Git commit sequence | Pass | Each requested page group has a separate commit; see the final report. |
 
