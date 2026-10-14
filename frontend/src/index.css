@@ -700,9 +700,37 @@
 .tasks-detail [role="tablist"] { border-color: rgba(255,255,255,.1); background: rgba(255,255,255,.025); }
 .tasks-detail [role="tab"][data-state="active"] { color: #fff; background: rgba(255,42,42,.16); box-shadow: inset 0 0 0 1px rgba(255,42,42,.24), 0 0 14px rgba(255,42,42,.12); }
 .tasks-detail table tbody tr:hover { background: rgba(255,42,42,.04); }
+.groups-page .group-hero {
+  min-height: 150px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: linear-gradient(90deg, rgba(5,5,5,.96), rgba(5,5,5,.76) 55%, rgba(5,5,5,.5)), url('/assets/backgrounds/cinematic-portal-reference.png') right 42% / cover no-repeat;
+  box-shadow: inset 0 0 32px rgba(255,42,42,.06);
+}
+.groups-page .group-hero .eyebrow { color: #ff6868; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.groups-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .85rem; }
+.groups-grid > * { min-width: 0; }
+.groups-page .group-tile {
+  position: relative;
+  overflow: hidden;
+  min-height: 142px;
+  align-content: space-between;
+  border-color: rgba(255,255,255,.11);
+  background: linear-gradient(110deg, rgba(5,5,5,.84), rgba(8,8,11,.76)), url('/assets/backgrounds/red-black-gradient.png') center / cover;
+  box-shadow: 0 14px 30px rgba(0,0,0,.22);
+}
+.groups-page .group-tile::after { position: absolute; inset: auto 0 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,42,42,.55), transparent); content: ''; }
+.groups-page .group-icon { background: rgba(255,42,42,.12); box-shadow: 0 0 20px rgba(255,42,42,.1); }
+.groups-page .group-empty { grid-column: 1 / -1; border-style: dashed; }
+.groups-page table { min-width: 620px; }
+.groups-detail > :not(.group-hero) { width: 100%; }
+.groups-detail .overflow-hidden:has(> table), .groups-detail .rounded-xl:has(> table) { overflow-x: auto; }
 @media (max-width: 767px) {
   .tasks-hero, .task-detail-hero { min-height: 140px; padding: 1.1rem; background-position: 67% center; }
   .tasks-page > div:first-of-type { align-items: stretch; }
+  .groups-grid { grid-template-columns: 1fr; }
+  .groups-page .group-hero { min-height: 130px; padding: 1.1rem; background-position: 65% center; }
   .auth-scene__frame { width: 115px; opacity: .24; }
   .auth-scene__frame--left { left: -2.75rem; bottom: 1.5rem; }
   .auth-scene__frame--right { right: -2.5rem; top: 1rem; }
