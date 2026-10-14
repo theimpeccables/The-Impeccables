@@ -777,6 +777,28 @@
 .settings-page [role="tablist"] { width: fit-content; max-width: 100%; flex-wrap: wrap; border-color: rgba(255,255,255,.11); background: rgba(255,255,255,.025); }
 .settings-page [role="tab"][data-state="active"] { color: #fff; background: rgba(255,42,42,.16); box-shadow: inset 0 0 0 1px rgba(255,42,42,.25), 0 0 14px rgba(255,42,42,.1); }
 .settings-page [role="tabpanel"] > div { border-color: rgba(255,255,255,.12); background: linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.015)); }
+.members-admin-hero, .approvals-hero, .leadership-hero, .audit-hero {
+  min-height: 145px;
+  align-content: center;
+  padding: 1.5rem 1.7rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: linear-gradient(90deg, rgba(5,5,5,.96), rgba(5,5,5,.8) 55%, rgba(5,5,5,.48)), url('/assets/backgrounds/hero-installation-reference.png') right 44% / cover no-repeat;
+  box-shadow: inset 0 0 34px rgba(255,42,42,.06);
+}
+.members-admin-page .eyebrow, .approvals-page .eyebrow, .leadership-page .eyebrow, .audit-page .eyebrow { color: #ff6868; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.members-admin-page > div:has(> table), .members-admin-page > .rounded-2xl { border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.025); }
+.members-admin-page table tbody tr { border-color: rgba(255,255,255,.08); }
+.members-admin-page table tbody tr:hover { background: rgba(255,42,42,.04); }
+.members-admin-page input:not([type="checkbox"]) { color: #f4f4f5; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; }
+.approvals-page > div:nth-child(2) { border-color: rgba(255,255,255,.11); background: rgba(255,255,255,.025); }
+.approvals-page .approval-item { border-color: rgba(255,255,255,.12); background: linear-gradient(120deg, rgba(255,255,255,.04), rgba(255,255,255,.015)); }
+.approvals-page .approval-item:hover { box-shadow: 0 10px 28px rgba(255,42,42,.08); }
+.leadership-page .leadership-stat { border-color: rgba(255,255,255,.11); background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.015)); }
+.leadership-page .leadership-tool { background: rgba(255,255,255,.025); }
+.audit-list { border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.02); }
+.audit-list article { border-color: rgba(255,255,255,.07); }
+.audit-list article:hover { background: rgba(255,42,42,.035); }
 @media (max-width: 767px) {
   .tasks-hero, .task-detail-hero { min-height: 140px; padding: 1.1rem; background-position: 67% center; }
   .tasks-page > div:first-of-type { align-items: stretch; }
@@ -789,6 +811,7 @@
   .events-page .events-grid > * > div:first-child > div:nth-child(2) { left: .8rem; top: .8rem; width: 38px; height: 38px; }
   .content-admin-page .content-admin-hero { padding: 1.1rem; }
   .profile-hero, .settings-hero { min-height: 125px; padding: 1.1rem; background-position: 65% center; }
+  .members-admin-hero, .approvals-hero, .leadership-hero, .audit-hero { min-height: 125px; padding: 1.1rem; background-position: 65% center; }
   .auth-scene__frame { width: 115px; opacity: .24; }
   .auth-scene__frame--left { left: -2.75rem; bottom: 1.5rem; }
   .auth-scene__frame--right { right: -2.5rem; top: 1rem; }

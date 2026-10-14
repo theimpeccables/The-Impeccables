@@ -8,6 +8,7 @@ import { Button } from '../../components/ui/Button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/Select';
 import { MultiSelectField } from '../../components/ui/Primitives';
 import { Input } from '../../components/ui/Primitives';
+import { Skeleton } from '../../components/ui/Primitives';
 import PasswordInput from '../../components/ui/PasswordInput';
 
 const ROLE_OPTIONS = [
@@ -121,10 +122,10 @@ const AdminMembers = () => {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 text-gray-100">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+    <div className="members-admin-page mx-auto max-w-6xl space-y-6 text-gray-100">
+      <div className="members-admin-hero flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-300">Administration</p>
+          <p className="eyebrow text-xs font-semibold uppercase tracking-[0.2em] text-red-300">Administration / Members</p>
           <h1 className="mt-2 text-3xl font-bold text-white">Member Management</h1>
           <p className="mt-2 text-sm text-gray-400">Manage member accounts and role assignments.</p>
         </div>
@@ -161,7 +162,7 @@ const AdminMembers = () => {
             <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search name or email" className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-white outline-none focus:border-red-500/60" />
           </label>
         </div>
-        {isLoading ? <p className="p-8 text-center text-sm text-gray-400" role="status">Loading member records…</p> : visibleMembers.length === 0 ? <p className="p-8 text-center text-sm text-gray-400">No members found.</p> : (
+        {isLoading ? <div className="space-y-2 p-4" role="status" aria-label="Loading members">{[0, 1, 2, 3].map((key) => <Skeleton key={key} className="h-16 w-full" />)}</div> : visibleMembers.length === 0 ? <p className="p-8 text-center text-sm text-gray-400">No members found.</p> : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] text-left text-sm">
               <thead className="bg-white/[0.03] text-xs uppercase tracking-wide text-gray-500">

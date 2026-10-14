@@ -84,13 +84,13 @@ export const DomainAdminQueue = () => {
   };
 
   return (
-    <div className="space-y-8 text-gray-100">
+    <div className="approvals-page space-y-8 text-gray-100">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="approvals-hero flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono uppercase tracking-widest text-purple-300 bg-purple-950/60 border border-purple-500/30 mb-2">
-            <CheckSquare className="w-3.5 h-3.5 text-purple-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono uppercase tracking-widest text-red-300 bg-red-950/60 border border-red-500/30 mb-2">
+            <CheckSquare className="w-3.5 h-3.5 text-red-400" />
             <span>Domain Quality Assurance</span>
           </div>
           <h1 className="text-3xl font-extrabold text-white">Domain Approval Queue</h1>
@@ -120,7 +120,7 @@ export const DomainAdminQueue = () => {
                 className={cn(
                   'px-2.5 py-1 rounded-lg text-xs font-mono capitalize transition-all',
                   selectedStatusFilter === status
-                    ? 'bg-purple-600 text-white font-medium'
+                    ? 'bg-red-600 text-white font-medium'
                     : 'bg-white/5 text-gray-400 hover:text-white'
                 )}
               >
@@ -139,7 +139,7 @@ export const DomainAdminQueue = () => {
           queueItems.map((sub) => (
             <Card
               key={sub.id}
-              className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-purple-500/40"
+              className="approval-item p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-red-500/40"
               hoverEffect={true}
             >
               <div className="flex items-start gap-5 min-w-0">
@@ -152,7 +152,7 @@ export const DomainAdminQueue = () => {
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-mono text-purple-400 font-semibold">
+                    <span className="text-xs font-mono text-red-400 font-semibold">
                       {sub.domainName}
                     </span>
                     <span className="text-gray-600">•</span>
@@ -219,13 +219,13 @@ export const DomainAdminQueue = () => {
           onClick={() => setReviewModalSub(null)}
         >
           <div
-            className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#0f0f18] border border-purple-500/30 p-6 sm:p-8 shadow-2xl flex flex-col"
+            className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#0f0f18] border border-red-500/30 p-6 sm:p-8 shadow-2xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-start justify-between mb-4">
               <div>
-                <span className="text-xs font-mono uppercase text-purple-400">
+                <span className="text-xs font-mono uppercase text-red-400">
                   {reviewModalSub.domainName} • Review Studio
                 </span>
                 <h2 className="text-2xl font-extrabold text-white mt-1">
@@ -272,7 +272,7 @@ export const DomainAdminQueue = () => {
                 placeholder="Leave commendation, artistic feedback, or specific revision directives..."
                 value={reviewNote}
                 onChange={(e) => setReviewNote(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 text-xs sm:text-sm resize-none"
+                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-red-500 text-xs sm:text-sm resize-none"
               />
             </div>
 
