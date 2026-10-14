@@ -140,23 +140,23 @@ export default function TaskDetailPage() {
     catch (cause) { toast.error(apiErrorMessage(cause, 'Submissions could not be approved.')); }
   };
 
-  if (loading) return <div className="mx-auto max-w-6xl space-y-4 px-4 py-8"><Skeleton className="h-9 w-1/3" /><Skeleton className="h-36 w-full" /><Skeleton className="h-72 w-full" /></div>;
-  if (error || !task) return <main className="mx-auto max-w-4xl px-4 py-12"><Card hoverEffect={false} className="text-center"><p className="text-sm text-red-200">{error || 'This task was not found.'}</p><Button className="mt-4" onClick={() => navigate('/dashboard/tasks')}>Back to tasks</Button></Card></main>;
+  if (loading) return <div className="tasks-detail mx-auto max-w-6xl space-y-4 px-4 py-8"><Skeleton className="h-9 w-1/3" /><Skeleton className="h-36 w-full" /><Skeleton className="h-72 w-full" /></div>;
+  if (error || !task) return <main className="tasks-detail mx-auto max-w-4xl px-4 py-12"><Card hoverEffect={false} className="text-center"><p className="text-sm text-red-200">{error || 'This task was not found.'}</p><Button className="mt-4" onClick={() => navigate('/dashboard/tasks')}>Back to tasks</Button></Card></main>;
 
   const ownView = !manager && !viewOnly;
   const status = current?.status || (overdue ? 'overdue' : 'not_started');
   const dueText = due ? new Date(due).toLocaleString() : 'No deadline';
   const countdown = due ? Math.ceil((new Date(due).getTime() - renderedAt) / 86400000) : null;
 
-  return <main className="mx-auto max-w-6xl space-y-6 px-4 py-6 text-white sm:px-6">
+  return <main className="tasks-detail mx-auto max-w-6xl space-y-6 px-4 py-6 text-white sm:px-6">
     <Link to="/dashboard/tasks" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white"><ArrowLeft size={16} /> Back to Tasks</Link>
-    <header className="flex flex-wrap items-start justify-between gap-4">
+    <header className="task-detail-hero flex flex-wrap items-start justify-between gap-4">
       <div className="min-w-0 flex-1"><div className="mb-2 flex flex-wrap gap-2"><Badge>{task.groupId?.name || task.domain?.name || 'Club-wide'}</Badge><Badge variant="outline" className="capitalize">{task.priority}</Badge>{viewOnly && <Badge variant="outline">View only</Badge>}<Badge variant="outline" className={stateBadge(status)}>{statusLabel(status)}</Badge></div>
         <h1 className="text-3xl font-bold">{task.title}</h1><div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400"><span className={`inline-flex items-center gap-2 ${overdue ? 'text-red-300' : ''}`}><CalendarClock size={15} />Due {dueText}{countdown !== null ? countdown >= 0 ? ` · Due in ${countdown} day${countdown === 1 ? '' : 's'}` : ` · ${Math.abs(countdown)} day${Math.abs(countdown) === 1 ? '' : 's'} overdue` : ''}</span><span><Users className="mr-1 inline" size={15} />{task.organizerId?.firstName || task.createdBy?.firstName} {task.organizerId?.lastName || task.createdBy?.lastName}</span></div>
       </div>
       {(manager || viewOnly) && <div className="flex flex-wrap gap-2"><Button variant="outline" onClick={remind}>Send reminder</Button>{manager && data.isSuperAdmin && <Button variant="outline" onClick={openReassign}>Reassign</Button>}{manager && <Button variant="secondary" onClick={() => setEditOpen(true)}>Edit task</Button>}{manager && activeTaskStatuses.includes(task.status) && <Button variant="primary" onClick={() => setConfirm('close')}>Close task</Button>}{manager && task.status !== 'cancelled' && <Button variant="outline" onClick={() => setConfirm('cancel')}>Cancel task</Button>}{data.canDelete && <Button variant="danger" onClick={() => setConfirm('delete')}>Delete</Button>}</div>}
     </header>
-    {task.description && <Card hoverEffect={false} className="p-5"><p className="whitespace-pre-wrap text-sm leading-6 text-gray-300">{task.description}</p>{task.submissionTypeHint && <p className="mt-3 text-xs text-gray-500">File type: {task.submissionTypeHint}</p>}</Card>}
+    {task.description && <Card hoverEffect={false} className="task-description-card p-5"><p className="whitespace-pre-wrap text-sm leading-6 text-gray-300">{task.description}</p>{task.submissionTypeHint && <p className="mt-3 text-xs text-gray-500">File type: {task.submissionTypeHint}</p>}</Card>}
 
     {ownView ? <Card hoverEffect={false} className="space-y-4"><div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-lg font-semibold">Your submission</h2><p className="mt-1 text-sm text-gray-400">{!activeTaskStatuses.includes(task.status) ? 'This task is no longer accepting submissions.' : task.requiresSubmission ? 'Upload files or add a link to your work.' : 'Add an optional update for the organizer.'}</p></div><Badge className={stateBadge(status)}>{statusLabel(status)}</Badge></div>
       {current?.status === 'changes_requested' && <div className="rounded-xl border border-amber-500/25 bg-amber-500/[.08] p-4"><p className="text-xs font-semibold uppercase tracking-wide text-amber-200">Changes requested</p><p className="mt-2 whitespace-pre-wrap text-sm text-gray-200">{current.reviewComment || 'Please update and resubmit your work.'}</p></div>}

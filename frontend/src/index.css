@@ -673,7 +673,36 @@
   background: linear-gradient(120deg, rgba(255,255,255,.035), rgba(255,42,42,.035)), #09090b;
 }
 .meeting-detail-summary { background: rgba(255,255,255,.025); }
+.tasks-page { isolation: isolate; }
+.tasks-hero {
+  min-height: 170px;
+  align-items: center;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: linear-gradient(90deg, rgba(5,5,5,.96), rgba(5,5,5,.84) 48%, rgba(5,5,5,.5)), url('/assets/backgrounds/hero-installation-reference.png') right 42% / cover no-repeat;
+  box-shadow: inset 0 0 35px rgba(255,42,42,.08), 0 18px 40px rgba(0,0,0,.2);
+}
+.tasks-hero .eyebrow { color: #ff6868; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.tasks-tabs { border-color: rgba(255,255,255,.1); background: rgba(255,255,255,.025); }
+.tasks-tabs [aria-selected="true"] { background: linear-gradient(135deg, #ff3434, #a90012); box-shadow: 0 0 16px rgba(255,42,42,.25); }
+.task-card { background: linear-gradient(130deg, rgba(255,255,255,.04), rgba(255,255,255,.015)); box-shadow: 0 12px 30px rgba(0,0,0,.16); }
+.task-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,42,42,.08); }
+.task-detail-hero {
+  min-height: 170px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: linear-gradient(90deg, rgba(5,5,5,.95), rgba(5,5,5,.84) 55%, rgba(5,5,5,.48)), url('/assets/backgrounds/cinematic-portal-reference.png') right 43% / cover no-repeat;
+  box-shadow: inset 0 0 32px rgba(255,42,42,.06);
+}
+.task-description-card { background: rgba(255,255,255,.025); }
+.tasks-detail [role="tablist"] { border-color: rgba(255,255,255,.1); background: rgba(255,255,255,.025); }
+.tasks-detail [role="tab"][data-state="active"] { color: #fff; background: rgba(255,42,42,.16); box-shadow: inset 0 0 0 1px rgba(255,42,42,.24), 0 0 14px rgba(255,42,42,.12); }
+.tasks-detail table tbody tr:hover { background: rgba(255,42,42,.04); }
 @media (max-width: 767px) {
+  .tasks-hero, .task-detail-hero { min-height: 140px; padding: 1.1rem; background-position: 67% center; }
+  .tasks-page > div:first-of-type { align-items: stretch; }
   .auth-scene__frame { width: 115px; opacity: .24; }
   .auth-scene__frame--left { left: -2.75rem; bottom: 1.5rem; }
   .auth-scene__frame--right { right: -2.5rem; top: 1rem; }

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarClock, ClipboardList, Plus } from 'lucide-react';
+import { CalendarClock, ClipboardList, Plus, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import api, { apiErrorMessage } from '../../services/api';
 import DateTimePicker from '../../components/ui/DateTimePicker';
@@ -57,14 +57,14 @@ export default function TasksPage() {
   };
   const groupOptions = [...(isSuperAdmin ? [{ value: 'club', label: 'Club-wide' }] : []), ...groups.map((group) => ({ value: group._id, label: group.name }))];
 
-  return <main className="mx-auto max-w-6xl space-y-6 px-4 py-6 text-white sm:px-6">
-    <header className="flex flex-wrap items-end justify-between gap-4">
-      <div><p className="text-xs uppercase tracking-[.2em] text-red-300">Member workspace</p><h1 className="mt-1 text-3xl font-bold">Tasks</h1><p className="mt-1 text-sm text-gray-400">Your tasks and submitted work</p></div>
+  return <main className="tasks-page mx-auto max-w-6xl space-y-6 px-4 py-6 text-white sm:px-6">
+    <header className="tasks-hero flex flex-wrap items-end justify-between gap-4">
+      <div><p className="eyebrow flex items-center gap-2"><Sparkles size={13} /> Tasks / My workspace</p><h1 className="mt-1 text-3xl font-bold">Tasks &amp; Duties</h1><p className="mt-1 text-sm text-gray-400">Track your assigned tasks, submit work and stay updated.</p></div>
       {canCreate && <Button onClick={() => setCreateOpen(true)} className="gap-2"><Plus size={16} /> New Task</Button>}
     </header>
 
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <div className="flex gap-2 rounded-xl border border-white/10 bg-white/[.03] p-1" role="tablist" aria-label="Task status">
+      <div className="tasks-tabs flex gap-2 rounded-xl border border-white/10 bg-white/[.03] p-1" role="tablist" aria-label="Task status">
         {['active', 'completed'].map((value) => <button key={value} type="button" role="tab" aria-selected={tab === value} onClick={() => setTab(value)} className={`rounded-lg px-4 py-2 text-sm capitalize ${tab === value ? 'bg-red-500/15 text-white' : 'text-gray-400 hover:text-white'}`}>{value === 'active' ? 'Active' : 'Completed'}</button>)}
       </div>
       <div className="w-full sm:w-64"><SelectField value={groupId} onChange={setGroupId} options={[{ value: 'all', label: isAdmin || isSuperAdmin ? 'All tasks' : 'All my groups' }, { value: 'club', label: 'Club-wide' }, ...filterGroups.map((group) => ({ value: group._id, label: group.name }))]} placeholder="Filter by group" aria-label="Filter tasks by group" /></div>
@@ -74,7 +74,7 @@ export default function TasksPage() {
     {loading ? <div className="space-y-3">{[1, 2, 3].map((key) => <Skeleton key={key} className="h-32 w-full" />)}</div> : !error && !items.length ? <Card hoverEffect={false} className="py-16 text-center"><ClipboardList className="mx-auto mb-3 text-gray-500" /><p className="text-sm text-gray-400">No tasks right now</p></Card> : <div className="space-y-3">{items.map((task) => {
       const due = task.dueAt ? new Date(task.dueAt) : null;
       const overdue = due && due < new Date() && !['closed', 'completed', 'cancelled'].includes(task.status);
-      return <Card key={task._id} hoverEffect={false} className="p-0 transition hover:border-red-500/25">
+      return <Card key={task._id} hoverEffect={false} className="task-card p-0 transition hover:border-red-500/25">
         <Link to={`/tasks/${task._id}`} className="block rounded-2xl p-5 outline-none focus-visible:ring-2 focus-visible:ring-red-500/50">
           <div className="flex flex-wrap items-start justify-between gap-4"><div className="min-w-0 flex-1">
             <div className="mb-2 flex flex-wrap gap-2"><Badge>{task.group?.name || 'Club-wide'}</Badge><Badge variant="outline" className="capitalize">{task.priority}</Badge>{task.myStatus && <Badge variant="outline" className={taskStatusStyle(task.myStatus)}>{statusLabels[task.myStatus] || task.myStatus}</Badge>}</div>
