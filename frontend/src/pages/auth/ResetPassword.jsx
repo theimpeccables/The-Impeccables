@@ -4,6 +4,8 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import api, { apiErrorMessage } from '../../services/api';
 import PasswordInput from '../../components/ui/PasswordInput';
+import { ArrowLeft, KeyRound } from 'lucide-react';
+import { ImpeccablesLogo } from '../../components/common/ImpeccablesLogo';
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -33,9 +35,10 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-[75vh] grid place-items-center px-4 py-16 text-white">
-      <Card className="w-full max-w-md p-8">
-        <h1 className="text-2xl font-bold">Choose a new password</h1>
+    <main className="auth-scene relative isolate flex min-h-[calc(100svh-5rem)] items-center justify-center overflow-hidden px-4 py-12 text-white">
+      <div aria-hidden="true" className="auth-scene__texture" />
+      <Card className="auth-card relative z-10 w-full max-w-md p-6 shadow-2xl sm:p-8">
+        <div className="mb-7 flex flex-col items-center text-center"><ImpeccablesLogo className="mb-3 h-12 w-14" /><KeyRound className="mb-2 h-5 w-5 text-red-400" /><h1 className="text-2xl font-bold">Choose a new password</h1><p className="mt-2 text-sm text-gray-400">Set a new secure password for your account.</p></div>
         {!token ? (
           <p className="mt-4 text-sm text-red-300" role="alert">This password reset link is missing its token.</p>
         ) : (
@@ -49,9 +52,9 @@ const ResetPassword = () => {
             <Button type="submit" isLoading={isLoading} className="w-full">Update password</Button>
           </form>
         )}
-        <Link to="/forgot-password" className="mt-6 inline-block text-sm text-red-300 hover:text-red-200">Request another reset link</Link>
+        <Link to="/forgot-password" className="mt-6 inline-flex items-center gap-2 text-sm text-red-300 hover:text-red-200"><ArrowLeft size={14} />Request another reset link</Link>
       </Card>
-    </div>
+    </main>
   );
 };
 
