@@ -11,15 +11,15 @@ export const Events = () => {
     return { ...event, id: event._id || event.slug, poster: event.posterImage, day: date ? String(date.getDate()).padStart(2, '0') : '', month: date?.toLocaleString('en', { month: 'short' }).toUpperCase() || '', date: date?.toLocaleDateString() || '', venue: event.venue || '', time: date?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || '' };
   });
   return (
-    <div className="public-page max-w-6xl mx-auto text-gray-100 flex flex-col">
+    <div className="public-page events-page max-w-6xl mx-auto text-gray-100 flex flex-col">
       
       {/* Screen 05: Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+      <div className="events-hero flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
         <div>
-          <span className="text-xs font-mono uppercase tracking-[0.2em] text-red-400 font-bold mb-2 block">
+          <span className="eyebrow text-xs font-mono uppercase tracking-[0.2em] text-red-400 font-bold mb-2 block">
             UPCOMING EVENTS
           </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-tight font-display">
+          <h1 className="text-4xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight font-display">
             BIGGER EXPERIENCES{' '}
             <span className="text-red-500 drop-shadow-[0_0_25px_rgba(255,30,56,0.5)]">
               AHEAD
@@ -38,7 +38,7 @@ export const Events = () => {
 
       {/* Screen 05: Event Items Stack */}
       <PublicDataState loading={loading} error={error} empty={`There are no ${showAllEvents ? 'events' : 'upcoming events'} at the moment.`} isEmpty={events.length === 0}>
-      <div className="space-y-4">
+      <div className="events-grid">
         {events.map((event) => (
           <EventCard key={event.id} event={event} />
         ))}

@@ -726,11 +726,50 @@
 .groups-page table { min-width: 620px; }
 .groups-detail > :not(.group-hero) { width: 100%; }
 .groups-detail .overflow-hidden:has(> table), .groups-detail .rounded-xl:has(> table) { overflow-x: auto; }
+.events-page .events-hero, .announcements-page .announcements-hero {
+  min-height: 165px;
+  align-items: center;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: linear-gradient(90deg, rgba(5,5,5,.96), rgba(5,5,5,.78) 55%, rgba(5,5,5,.48)), url('/assets/backgrounds/hero-installation-reference.png') right 44% / cover no-repeat;
+  box-shadow: inset 0 0 36px rgba(255,42,42,.07);
+}
+.events-page .events-hero .eyebrow, .announcements-page .announcements-hero .eyebrow,
+.content-admin-page .eyebrow { color: #ff6868; font-size: 10px; font-weight: 700; letter-spacing: .2em; }
+.events-page .events-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+.events-page .events-grid > * { min-width: 0; }
+.events-page .events-grid > * > div:first-child {
+  min-height: 300px;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-color: rgba(255,255,255,.13);
+  background: linear-gradient(160deg, rgba(8,8,12,.94), rgba(5,5,7,.86));
+}
+.events-page .events-grid > * > div:first-child > div:first-child { width: 100%; align-items: flex-start; flex-direction: column; }
+.events-page .events-grid > * > div:first-child > div:first-child > div:first-child { width: 100%; height: 150px; border-radius: 12px; }
+.events-page .events-grid > * > div:first-child > div:first-child > div:first-child img { object-fit: cover; }
+.events-page .events-grid > * > div:first-child > div:nth-child(2) { position: absolute; left: 1rem; top: 1rem; width: 44px; height: 44px; font-size: 15px; }
+.events-page .events-grid > * > div:first-child > div:first-child > div:last-child { width: 100%; }
+.announcements-page > div:last-child > div { border-color: rgba(255,255,255,.12); background: linear-gradient(145deg, rgba(15,15,19,.9), rgba(5,5,7,.85)); }
+.event-detail-page .event-detail-card { border-color: rgba(255,255,255,.13); background: linear-gradient(145deg, rgba(11,11,15,.94), rgba(5,5,7,.92)); box-shadow: 0 24px 70px rgba(0,0,0,.34); }
+.content-admin-page .content-admin-hero { padding: 1.4rem 1.6rem; border: 1px solid rgba(255,255,255,.12); border-radius: 18px; background: linear-gradient(90deg, rgba(5,5,5,.96), rgba(5,5,5,.78) 55%, rgba(5,5,5,.48)), url('/assets/backgrounds/red-black-gradient.png') right center / cover no-repeat; }
+.content-admin-page > div > div { border-color: rgba(255,255,255,.11); background: linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.015)); }
+.content-admin-page input:not([type="checkbox"]), .content-admin-page textarea, .content-admin-page select { color: #f4f4f5; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; outline: none; }
+.content-admin-page input:focus, .content-admin-page textarea:focus, .content-admin-page select:focus { border-color: rgba(255,42,42,.6); box-shadow: 0 0 0 2px rgba(255,42,42,.16); }
+.content-admin-page input[type="checkbox"] { accent-color: #ff2a2a; }
 @media (max-width: 767px) {
   .tasks-hero, .task-detail-hero { min-height: 140px; padding: 1.1rem; background-position: 67% center; }
   .tasks-page > div:first-of-type { align-items: stretch; }
   .groups-grid { grid-template-columns: 1fr; }
   .groups-page .group-hero { min-height: 130px; padding: 1.1rem; background-position: 65% center; }
+  .events-page .events-hero, .announcements-page .announcements-hero { min-height: 130px; padding: 1.1rem; background-position: 65% center; }
+  .events-page .events-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: .7rem; }
+  .events-page .events-grid > * > div:first-child { min-height: 270px; padding: .8rem; }
+  .events-page .events-grid > * > div:first-child > div:first-child > div:first-child { height: 120px; }
+  .events-page .events-grid > * > div:first-child > div:nth-child(2) { left: .8rem; top: .8rem; width: 38px; height: 38px; }
+  .content-admin-page .content-admin-hero { padding: 1.1rem; }
   .auth-scene__frame { width: 115px; opacity: .24; }
   .auth-scene__frame--left { left: -2.75rem; bottom: 1.5rem; }
   .auth-scene__frame--right { right: -2.5rem; top: 1rem; }

@@ -8,15 +8,15 @@ export const Announcements = () => {
   const { data, loading, error } = usePublicData('/announcements', { params: { limit: showAll ? 50 : 12 } });
   const announcements = data.map((item) => ({ ...item, id: item._id || item.id, date: new Date(item.sentAt || item.createdAt).toLocaleDateString() }));
   return (
-    <div className="public-page max-w-6xl mx-auto text-gray-100 flex flex-col">
+    <div className="public-page announcements-page max-w-6xl mx-auto text-gray-100 flex flex-col">
       
       {/* Screen 07: Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+      <div className="announcements-hero flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
         <div>
-          <span className="text-xs font-mono uppercase tracking-[0.2em] text-red-400 font-bold mb-2 block">
+          <span className="eyebrow text-xs font-mono uppercase tracking-[0.2em] text-red-400 font-bold mb-2 block">
             ANNOUNCEMENTS
           </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-tight font-display">
+          <h1 className="text-4xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight font-display">
             STAY{' '}
             <span className="text-red-500 drop-shadow-[0_0_25px_rgba(255,30,56,0.5)]">
               IN THE LOOP

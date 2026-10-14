@@ -25,10 +25,10 @@ export const EventDetail = () => {
     const url = URL.createObjectURL(new Blob([content], { type: 'text/calendar;charset=utf-8' }));
     const anchor = document.createElement('a'); anchor.href = url; anchor.download = `${event.slug}.ics`; anchor.click(); URL.revokeObjectURL(url);
   };
-  return <main className="public-page max-w-5xl mx-auto text-gray-100">
+  return <main className="public-page event-detail-page max-w-5xl mx-auto text-gray-100">
     <Link to="/events" className="mb-8 inline-flex items-center gap-2 text-sm text-red-300"><ArrowLeft size={16} /> All events</Link>
     <PublicDataState loading={loading} error={error} empty="This event is not available." isEmpty={!event}>
-      <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+      <article className="event-detail-card overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
         {event?.posterImage && <img src={event.posterImage} alt="" className="max-h-[460px] w-full object-cover" />}
         <div className="p-6 sm:p-10">
           <p className="text-xs uppercase tracking-[.2em] text-red-300">{event?.eventType}</p>
