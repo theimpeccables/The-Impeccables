@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { logout } from '../../store/slices/authSlice';
 import { notify } from '../../utils/notify';
 import {
@@ -22,12 +23,14 @@ import {
 } from 'lucide-react';
 import { ImpeccablesLogo } from '../common/ImpeccablesLogo';
 import NotificationBell from './NotificationBell';
-import { Avatar, AvatarFallback, AvatarImage, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/Primitives';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/Primitives';
+import { UserAvatar } from '../ui/DesignPrimitives';
 import { cn } from '../../utils/cn';
 import api, { clearAccessToken } from '../../services/api';
 
 export const DashboardLayout = () => {
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -50,43 +53,32 @@ export const DashboardLayout = () => {
     navigate('/');
   };
 
-  const navItems = [
-    {
-      name: 'Dashboard',
-      path: '/dashboard',
-      icon: LayoutDashboard,
-      roles: ['member', 'domain_admin', 'admin', 'super_admin'],
-    },
-    { name: 'Meetings', path: '/dashboard/attendance', icon: CalendarCheck, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
-    { name: 'Events', path: '/events', icon: CalendarDays, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
-    { name: 'Groups', path: '/dashboard/groups', icon: Users, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
-    { name: 'Profile', path: '/dashboard/profile', icon: UserRound, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
-    {
-      name: 'Approvals',
-      path: '/dashboard/approvals',
-      icon: CheckSquare,
-      badge: pendingApprovalsCount,
-      roles: ['domain_admin', 'admin', 'super_admin'],
-    },
-    { name: 'Events', path: '/dashboard/content', icon: Megaphone, roles: ['admin', 'super_admin'] },
-    { name: 'Tasks', path: '/dashboard/tasks', icon: ListTodo, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
-    {
-      name: 'Leadership',
-      path: '/dashboard/admin',
-      icon: Megaphone,
-      roles: ['admin', 'super_admin'],
-    },
-    {
-      name: 'Members',
-      path: '/dashboard/members',
-      icon: Users,
-      roles: ['admin', 'super_admin'],
-    },
-    { name: 'Audit history', path: '/dashboard/audit', icon: Shield, roles: ['super_admin'] },
-    { name: 'Settings', path: '/dashboard/settings', icon: Settings, roles: ['domain_admin', 'admin', 'super_admin'] },
+  const navGroups = [
+    { heading: 'Member', items: [
+      { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+      { name: 'Meetings', path: '/dashboard/attendance', icon: CalendarCheck, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+      { name: 'Tasks', path: '/dashboard/tasks', icon: ListTodo, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+      { name: 'Events', path: '/events', icon: CalendarDays, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+      { name: 'Groups', path: '/dashboard/groups', icon: Users, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+      { name: 'Announcements', path: '/announcements', icon: Megaphone, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+      { name: 'Profile', path: '/dashboard/profile', icon: UserRound, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+    ] },
+    { heading: 'Manage', items: [
+      { name: 'Approvals', path: '/dashboard/approvals', icon: CheckSquare, badge: pendingApprovalsCount, roles: ['domain_admin', 'admin', 'super_admin'] },
+      { name: 'Content', path: '/dashboard/content', icon: Megaphone, roles: ['admin', 'super_admin'] },
+    ] },
+    { heading: 'Admin', items: [
+      { name: 'Members', path: '/dashboard/members', icon: Users, roles: ['admin', 'super_admin'] },
+      { name: 'Leadership', path: '/dashboard/admin', icon: Shield, roles: ['admin', 'super_admin'] },
+      { name: 'Audit history', path: '/dashboard/audit', icon: Shield, roles: ['super_admin'] },
+      { name: 'Settings', path: '/dashboard/settings', icon: Settings, roles: ['domain_admin', 'admin', 'super_admin'] },
+    ] },
   ];
-
-  const authorizedNavItems = navItems.filter((item) => item.roles.includes(role) && !(role === 'member' && ['Approvals', 'Tasks', 'Events'].includes(item.name) && item.path !== '/events'));
+  const visibleGroups = navGroups.map((group) => ({ ...group, items: group.items.filter((item) => item.roles.includes(role)) })).filter((group) => group.items.length);
+  const routeLabels = { '/dashboard': 'Dashboard', '/dashboard/attendance': 'Meetings', '/dashboard/tasks': 'Tasks', '/dashboard/groups': 'Groups', '/dashboard/profile': 'Profile', '/dashboard/approvals': 'Approvals', '/dashboard/content': 'Content', '/dashboard/audit': 'Audit History', '/dashboard/settings': 'Settings', '/dashboard/members': 'Members', '/dashboard/admin': 'Leadership', '/dashboard/submit': 'Submit Work', '/dashboard/notifications': 'Notifications' };
+  const activeItem = navGroups.flatMap((group) => group.items).find((item) => location.pathname === item.path || location.pathname.startsWith(`${item.path}/`));
+  const pageName = routeLabels[location.pathname] || activeItem?.name || (location.pathname.startsWith('/meetings/') ? 'Meeting details' : location.pathname.startsWith('/tasks/') ? 'Task details' : 'Dashboard');
+  const pageMotion = reduceMotion ? {} : { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: 0 }, transition: { duration: 0.2 } };
 
   return (
     <div className="min-h-screen bg-[#07070a] text-gray-100 flex flex-col lg:flex-row">
@@ -96,18 +88,18 @@ export const DashboardLayout = () => {
           ========================================================== */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-72 bg-[#0c0c14] border-r border-white/10 flex flex-col justify-between transition-transform duration-300 lg:translate-x-0',
+          'dashboard-sidebar fixed inset-y-0 left-0 z-50 flex w-[248px] flex-col justify-between border-r border-white/10 transition-transform duration-300 lg:translate-x-0',
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <div>
           {/* Logo */}
-          <div className="h-20 px-6 border-b border-white/10 flex items-center justify-between">
+          <div className="h-[68px] border-b border-white/[.07] px-5 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
-              <ImpeccablesLogo className="w-10 h-8 shrink-0" />
+              <ImpeccablesLogo className="h-8 w-9 shrink-0" />
               <div className="flex flex-col">
-                <span className="text-sm font-bold tracking-tight text-white">THE IMPECCABLES</span>
-                <span className="text-[9px] font-mono uppercase tracking-widest text-red-400">Portal v2.0</span>
+                <span className="text-[11px] font-bold tracking-wide text-white">THE IMPECCABLES</span>
+                <span className="text-[8px] font-semibold uppercase tracking-[.2em] text-red-400">Portal</span>
               </div>
             </Link>
 
@@ -120,14 +112,12 @@ export const DashboardLayout = () => {
           </div>
 
           {/* Navigation Links */}
-          <div className="p-4 space-y-1.5">
-            <div className="px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-gray-500">
-              Workspace
-            </div>
-
-            {authorizedNavItems.map((item) => {
+          <nav className="space-y-4 px-3 py-4">
+            {visibleGroups.map((group) => <section key={group.heading}>
+              <h2 className="px-3 pb-1.5 text-[9px] font-semibold uppercase tracking-[.2em] text-gray-600">{group.heading}</h2>
+              <div className="space-y-1">{group.items.map((item) => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
+              const isActive = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
 
               return (
                 <Link
@@ -135,50 +125,38 @@ export const DashboardLayout = () => {
                   to={item.path}
                   onClick={() => setIsSidebarOpen(false)}
                   className={cn(
-                    'flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all group',
+                    'dashboard-nav-link flex items-center justify-between rounded-xl px-3 py-2 text-[12px] font-medium transition-all group',
                     isActive
-                      ? 'bg-purple-600/20 text-purple-200 border border-purple-500/30'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'is-active border border-red-500/35 bg-red-600/15 text-white shadow-[0_0_18px_rgba(255,42,42,.12)]'
+                      : 'border border-transparent text-gray-400 hover:bg-white/[.04] hover:text-white'
                   )}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={cn('w-4 h-4', isActive ? 'text-purple-400' : 'text-gray-400 group-hover:text-purple-300')} />
+                    <Icon className={cn('h-4 w-4', isActive ? 'text-red-300' : 'text-gray-500 group-hover:text-red-300')} />
                     <span>{item.name}</span>
                   </div>
 
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      <span className="rounded-full border border-red-500/25 bg-red-500/15 px-2 py-0.5 text-[10px] font-semibold text-red-200">
                       {item.badge}
                     </span>
                   )}
                 </Link>
               );
-            })}
-
-            <div className="pt-4 mt-4 border-t border-white/5">
-              <Link
-                to="/"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
-              >
-                <ExternalLink className="w-4 h-4 text-cyan-400" />
-                <span>View Public Website</span>
-              </Link>
-            </div>
-          </div>
+            })}</div>
+            </section>)}
+            <div className="border-t border-white/[.07] pt-3"><Link to="/" className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs text-gray-400 transition-colors hover:bg-white/[.04] hover:text-white"><ExternalLink className="h-4 w-4 text-red-300" /><span>View Public Website</span></Link></div>
+          </nav>
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-4 border-t border-white/10 bg-[#09090f]">
-          <div className="flex items-center gap-3 mb-3">
-              <img
-              src={user?.profilePhoto || user?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'}
-              alt={user?.name || 'User'}
-              className="w-10 h-10 rounded-xl object-cover border border-purple-400/30 shrink-0"
-            />
+        <div className="border-t border-white/[.07] bg-black/20 p-3">
+          <div className="flex items-center gap-3 rounded-xl p-2">
+              <UserAvatar user={user} className="h-9 w-9 shrink-0 border-red-500/30" />
             <div className="min-w-0 flex-1">
-              <div className="text-xs font-bold text-white truncate">{user?.name || 'Member'}</div>
-              <div className="text-[10px] font-mono text-purple-400 capitalize truncate">
-                {role.replace('_', ' ')}
+              <div className="truncate text-xs font-semibold text-white">{user?.name || 'Member'}</div>
+              <div className="truncate text-[10px] capitalize text-red-300">
+                {String(role || 'member').replaceAll('_', ' ')}
               </div>
             </div>
           </div>
@@ -197,10 +175,10 @@ export const DashboardLayout = () => {
       {/* ==========================================================
           MAIN CONTENT AREA
           ========================================================== */}
-      <div className="flex-1 lg:pl-72 flex flex-col min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col lg:pl-[248px]">
         
         {/* Top bar */}
-        <header className="h-20 border-b border-white/10 bg-[#07070a]/80 backdrop-blur-xl px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+        <header className="dashboard-topbar sticky top-0 z-30 flex h-[68px] items-center justify-between border-b border-white/[.07] px-4 backdrop-blur-xl sm:px-7">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsSidebarOpen(true)}
@@ -211,22 +189,22 @@ export const DashboardLayout = () => {
             <div className="lg:hidden flex items-center gap-2">
               <ImpeccablesLogo className="w-7 h-6 shrink-0" />
             </div>
-            <div className="flex items-center gap-2 text-xs font-mono text-gray-400">
-              <span className="hidden sm:inline">The Impeccables</span>
-              <ChevronRight className="w-3.5 h-3.5 text-gray-600 hidden sm:inline" />
-              <span className="text-white capitalize">{location.pathname.replace('/dashboard', '') || 'Overview'}</span>
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <span className="hidden sm:inline">Home</span>
+              <ChevronRight className="hidden h-3.5 w-3.5 text-gray-700 sm:inline" />
+              <span className="text-gray-200">{pageName}</span>
             </div>
           </div>
 
           {/* Quick Role Preview Pill */}
-          <div className="flex items-center gap-3"><NotificationBell />
-            <DropdownMenu><DropdownMenuTrigger aria-label="Open profile menu" className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#ff2a2a]/50"><Avatar className="h-10 w-10 border border-white/15"><AvatarImage src={user?.profilePhoto || user?.avatar || undefined} alt={user?.name || 'Profile'} /><AvatarFallback>{user?.firstName?.[0] || user?.name?.[0] || 'U'}</AvatarFallback></Avatar></DropdownMenuTrigger><DropdownMenuContent align="end" className="w-48"><DropdownMenuItem asChild><Link to="/dashboard/profile"><UserRound size={15} /> View Profile</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/settings"><Settings size={15} /> Settings</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onSelect={(event) => { event.preventDefault(); handleLogout(); }} className="text-red-200 focus:text-red-100"><LogOut size={15} /> Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
+          <div className="flex items-center gap-2.5"><NotificationBell />
+            <DropdownMenu><DropdownMenuTrigger aria-label="Open profile menu" className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"><UserAvatar user={user} className="h-9 w-9 border-white/15" /></DropdownMenuTrigger><DropdownMenuContent align="end" className="w-48"><DropdownMenuItem asChild><Link to="/dashboard/profile"><UserRound size={15} /> View Profile</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/settings"><Settings size={15} /> Settings</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onSelect={(event) => { event.preventDefault(); handleLogout(); }} className="text-red-200 focus:text-red-100"><LogOut size={15} /> Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
           </div>
         </header>
 
         {/* Child Page Output */}
-        <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
-          <Outlet />
+        <main className="mx-auto w-full max-w-[1600px] flex-1 p-4 sm:p-6 xl:p-8">
+          <AnimatePresence mode="wait" initial={false}><motion.div key={location.pathname} {...pageMotion}><Outlet /></motion.div></AnimatePresence>
         </main>
       </div>
 
