@@ -7,7 +7,7 @@ export const MetricCard = ({
   value,
   subtext,
   icon: Icon,
-  iconColor = 'text-purple-400',
+  iconColor = 'text-red-300',
   valueColor = 'text-white',
   className,
 }) => {

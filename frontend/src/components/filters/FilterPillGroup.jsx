@@ -27,7 +27,7 @@ export const FilterPillGroup = ({
               'rounded-lg font-mono transition-all select-none cursor-pointer',
               size === 'xs' ? 'px-2 py-0.5 text-[11px]' : 'px-3 py-1.5 text-xs',
               isActive
-                ? 'bg-purple-600 text-white font-medium shadow-md shadow-purple-950/40 border border-purple-400/30'
+                ? 'bg-red-600 text-white font-medium shadow-md shadow-red-950/40 border border-red-400/30'
                 : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border border-white/5'
             )}
           >

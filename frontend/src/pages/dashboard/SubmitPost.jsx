@@ -89,7 +89,7 @@ export const SubmitPost = () => {
       <div>
         <button
           onClick={() => navigate('/dashboard')}
-          className="inline-flex items-center gap-1.5 text-xs font-mono text-purple-400 hover:text-purple-300 mb-4 cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-red-300 hover:text-red-200 mb-4 cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
         </button>
@@ -119,7 +119,7 @@ export const SubmitPost = () => {
                   placeholder="e.g. Nocturnal Whispers: Neon Campus at 2 AM"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/70 text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/70 text-sm"
                 />
               </div>
 
@@ -160,7 +160,7 @@ export const SubmitPost = () => {
                   placeholder="Explain the artistic intention, medium, color palette, or backstory behind this work..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/70 text-sm resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/70 text-sm resize-none"
                 />
               </div>
 
@@ -175,7 +175,7 @@ export const SubmitPost = () => {
                     placeholder="Charcoal, Neon, KIET"
                     value={formData.tags}
                     onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/70 text-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/70 text-sm"
                   />
                 </div>
 
@@ -191,7 +191,7 @@ export const SubmitPost = () => {
               {formError && <p className="text-sm text-red-300" role="alert">{formError}</p>}
               <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                 <span className="text-xs text-gray-400">
-                  Will enter: <strong className="text-purple-300">{selectedDomainObj.name} Queue</strong>
+                  Will enter: <strong className="text-red-300">{selectedDomainObj.name} Queue</strong>
                 </span>
                 <Button
                   type="submit"
@@ -210,11 +210,11 @@ export const SubmitPost = () => {
 
         {/* Live Preview (5 cols) */}
         <div className="lg:col-span-5 sticky top-28 space-y-4">
-          <div className="text-xs font-mono uppercase tracking-widest text-purple-400 flex items-center gap-1.5">
+          <div className="text-xs font-mono uppercase tracking-widest text-red-300 flex items-center gap-1.5">
             <Eye className="w-4 h-4" /> Live Card Preview (Once Published)
           </div>
 
-          <div className="rounded-2xl overflow-hidden bg-[#0d0d16] border border-purple-500/30 shadow-2xl flex flex-col">
+          <div className="rounded-2xl overflow-hidden bg-[#0d0d16] border border-red-500/30 shadow-2xl flex flex-col">
             <div className="relative aspect-[16/10] overflow-hidden bg-black/80">
               <img
                 src={previewUrl}
@@ -246,8 +246,8 @@ export const SubmitPost = () => {
             </div>
           </div>
 
-          <Card className="p-4 bg-purple-950/20 border-purple-500/20 text-xs text-gray-300">
-            <div className="font-bold text-purple-300 mb-1">Approval Protocol Notice</div>
+          <Card className="p-4 bg-red-950/20 border-red-500/20 text-xs text-gray-300">
+            <div className="font-bold text-red-300 mb-1">Approval Protocol Notice</div>
             Submissions are evaluated by designated domain leads for technical quality, authenticity, and college guidelines before publication.
           </Card>
         </div>

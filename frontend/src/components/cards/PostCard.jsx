@@ -15,7 +15,7 @@ export const PostCard = ({
     <div
       onClick={onClick}
       className={cn(
-        'group relative rounded-2xl overflow-hidden bg-[#0d0d16] border border-white/10 hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-950/40 flex flex-col cursor-pointer',
+        'group relative rounded-2xl overflow-hidden bg-[#0d0d16] border border-white/10 hover:border-red-500/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-red-950/40 flex flex-col cursor-pointer',
         className
       )}
     >
@@ -60,7 +60,7 @@ export const PostCard = ({
       {/* Content */}
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div>
-          <h3 className="text-base font-bold text-white group-hover:text-purple-300 transition-colors line-clamp-1">
+          <h3 className="text-base font-bold text-white group-hover:text-red-300 transition-colors line-clamp-1">
             {post.title}
           </h3>
           <p className="mt-2 text-xs text-gray-400 line-clamp-2 leading-relaxed">

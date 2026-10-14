@@ -29,7 +29,7 @@ export const PostLightboxModal = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0f0f18] border border-purple-500/30 p-6 sm:p-8 shadow-2xl flex flex-col"
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0f0f18] border border-red-500/30 p-6 sm:p-8 shadow-2xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -52,7 +52,7 @@ export const PostLightboxModal = ({
         {/* Post Details */}
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="text-xs font-mono px-3 py-1 rounded-full bg-purple-600/30 text-purple-200 border border-purple-500/40">
+            <span className="text-xs font-mono px-3 py-1 rounded-full bg-red-600/30 text-red-200 border border-red-500/40">
               {post.domainName}
             </span>
             <span className="text-xs font-mono uppercase px-2.5 py-1 rounded-full bg-white/5 text-gray-400 border border-white/10">
@@ -67,7 +67,7 @@ export const PostLightboxModal = ({
             {post.title}
           </h2>
 
-          <div className="text-sm font-medium text-purple-400 mt-1">
+          <div className="text-sm font-medium text-red-300 mt-1">
             Artist / Creator: {post.author}
           </div>
 

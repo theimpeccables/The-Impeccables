@@ -18,8 +18,8 @@ export const SectionHeading = ({
   return (
     <div className={cn('flex flex-col mb-12 md:mb-16', alignClasses[align], className)}>
       {badge && (
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest text-purple-400 bg-purple-500/10 border border-purple-500/20 mb-4 backdrop-blur-md">
-          <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest text-red-300 bg-red-500/10 border border-red-500/20 mb-4 backdrop-blur-md">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
           {badge}
         </div>
       )}
@@ -27,7 +27,7 @@ export const SectionHeading = ({
       <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white max-w-3xl leading-[1.15]">
         {title}{' '}
         {highlight && (
-          <span className="bg-gradient-to-r from-purple-400 via-fuchsia-300 to-cyan-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-red-400 via-rose-300 to-red-500 bg-clip-text text-transparent">
             {highlight}
           </span>
         )}

@@ -143,13 +143,13 @@ export const CreativeHeroCanvas = () => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    const purpleLight = new THREE.PointLight(0xa855f7, 3, 50);
-    purpleLight.position.set(12, 12, 10);
-    scene.add(purpleLight);
+    const accentLight = new THREE.PointLight(0xff2a2a, 3, 50);
+    accentLight.position.set(12, 12, 10);
+    scene.add(accentLight);
 
-    const cyanLight = new THREE.PointLight(0x06b6d4, 3, 50);
-    cyanLight.position.set(-14, -10, 8);
-    scene.add(cyanLight);
+    const secondaryRedLight = new THREE.PointLight(0xff6868, 3, 50);
+    secondaryRedLight.position.set(-14, -10, 8);
+    scene.add(secondaryRedLight);
 
     // Mouse Interaction
     let mouseX = 0;

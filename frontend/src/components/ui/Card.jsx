@@ -6,7 +6,7 @@ export const Card = ({
   children,
   className,
   hoverEffect = true,
-  glowColor = 'purple',
+  glowColor = 'red',
   ...props
 }) => {
   const glowStyles = THEME.glowStyles;
@@ -17,7 +17,7 @@ export const Card = ({
         'relative rounded-2xl bg-[#0f0f18]/80 backdrop-blur-xl border border-white/8 p-6 text-gray-100 transition-all duration-300 shadow-xl overflow-hidden',
         hoverEffect && [
           'hover:-translate-y-1',
-          glowStyles[glowColor] || glowStyles.purple,
+          glowStyles[glowColor] || glowStyles.default,
         ],
         className
       )}

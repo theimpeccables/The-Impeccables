@@ -17,7 +17,7 @@ export const SearchInput = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full pl-10 pr-9 py-2 text-xs sm:text-sm bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/60 transition-colors"
+        className="w-full pl-10 pr-9 py-2 text-xs sm:text-sm bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-red-500/60 transition-colors"
       />
       {value && onClear && (
         <button
