@@ -8,7 +8,7 @@ const statusConfig = {
   },
   approved: {
     label: 'Approved',
-    className: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+    className: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
   },
   under_review: {
     label: 'Under Review',
@@ -16,11 +16,11 @@ const statusConfig = {
   },
   changes_requested: {
     label: 'Changes Requested',
-    className: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+    className: 'bg-red-500/15 text-red-200 border-red-500/30',
   },
   rejected: {
     label: 'Rejected',
-    className: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+    className: 'bg-red-500/15 text-red-200 border-red-500/30',
   },
   draft: {
     label: 'Draft',
@@ -36,18 +36,16 @@ export const Badge = ({ children, className, variant = 'default', size = 'sm' })
   };
 
   const variants = {
-    default: 'bg-white/10 text-gray-200 border-white/10',
-    purple: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
-    cyan: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+    default: 'bg-white/[.06] text-gray-200 border-white/10',
     amber: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-    rose: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+    rose: 'bg-red-500/15 text-red-200 border-red-500/30',
     emerald: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
   };
 
   return (
     <span
       className={cn(
-        'inline-flex items-center font-medium rounded-full border tracking-wide uppercase font-mono',
+        'inline-flex items-center rounded-full border font-medium tracking-wide',
         sizes[size],
         variants[variant] || variants.default,
         className
@@ -64,7 +62,7 @@ export const StatusPill = ({ status, className }) => {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border font-mono tracking-wider',
+        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-wide',
         config.className,
         className
       )}

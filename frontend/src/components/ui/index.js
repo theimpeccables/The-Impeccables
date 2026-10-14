@@ -4,3 +4,4 @@ export * from './Badge';
 export * from './SectionHeading';
 export * from './SocialIcons';
 export * from './EmptyState';
+export * from './DesignPrimitives';

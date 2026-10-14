@@ -4,13 +4,13 @@ import { Loader2 } from 'lucide-react';
 
 const variants = {
   primary:
-    'bg-[#ff2a2a] hover:bg-[#ff4141] text-white shadow-lg shadow-red-950/30 border border-red-400/20',
+    'bg-[#ff2a2a] hover:bg-[#ff4141] text-white shadow-[0_0_20px_rgba(255,42,42,.2)] border border-red-400/25',
   secondary:
-    'bg-white/10 hover:bg-white/15 text-white border border-white/15 backdrop-blur-md',
+    'bg-white/[.06] hover:bg-white/[.1] text-white border border-white/12 backdrop-blur-md',
   glow:
     'bg-[#ff2a2a] hover:bg-[#ff4141] text-white shadow-[0_0_25px_rgba(255,42,42,0.28)] hover:shadow-[0_0_35px_rgba(255,42,42,0.4)] border border-red-400/40',
   glass:
-    'bg-black/40 hover:bg-black/60 text-gray-200 hover:text-white border border-white/10 backdrop-blur-xl',
+    'bg-white/[.035] hover:bg-red-500/[.06] text-gray-200 hover:text-white border border-white/10 backdrop-blur-xl',
   outline:
     'bg-transparent hover:bg-red-500/10 text-red-200 hover:text-white border border-red-500/40',
   danger:

@@ -72,10 +72,9 @@
     --input: 0 0% 18%;
     --ring: 0 100% 58%;
     --radius: 0.875rem;
-    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-    --font-heading: 'Space Grotesk', system-ui, sans-serif;
-    --font-display: 'Syne', sans-serif;
-    
+    --font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-heading: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-display: 'Anton', 'Bebas Neue', Impact, sans-serif;
     --bg-dark: #050505;
     --bg-card: rgba(255, 255, 255, 0.04);
     --accent-red: #ff2a2a;
@@ -97,7 +96,7 @@
     padding: 0;
     overflow-x: hidden;
     min-height: 100vh;
-    background: radial-gradient(circle at 50% 0%, rgba(255, 42, 42, 0.08) 0%, #050505 75%);
+    background: radial-gradient(ellipse at 12% 0%, rgba(255, 42, 42, 0.07) 0%, transparent 28%), #050505;
   }
 
   .public-page {
@@ -126,6 +125,20 @@
   }
 
   input[type='checkbox'], input[type='radio'] { accent-color: #ff2a2a; }
+}
+
+@layer components {
+  .glass-surface {
+    border: 1px solid var(--border-glow);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+  }
+  .focus-red:focus-visible {
+    outline: 2px solid var(--accent-red);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(255, 42, 42, .16);
+  }
 }
 
 /* Custom Red Creative Glass & Glow utilities */
