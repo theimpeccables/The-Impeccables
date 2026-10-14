@@ -108,14 +108,20 @@ The GitHub Actions workflow runs these checks on pushes and pull requests. Tests
 - Configure SPA rewrites so nested React Router paths serve `index.html`.
 - Add the Vercel production and preview origins to the backend `CORS_ORIGINS` allowlist.
 
-### API on Render or Railway
+### API on Railway
 
-- Deploy the repository with working directory `backend`.
-- Build/install command: `npm ci`; start command: `npm start` (or root command `npm run start:backend`).
+- Create a Railway service from the GitHub repository with root directory `/backend`.
+- Install command: `npm ci`; start command: `npm run start:production`. The regular `npm start` command watches source files for local development; use the production command on hosts.
 - Set `NODE_ENV=production`, `PORT` if required by the host, `MONGODB_URI`, both JWT secrets, `COOKIE_SECURE=true`, `COOKIE_SAME_SITE=lax`, `FRONTEND_URL`, and explicit `CORS_ORIGINS`.
 - Add Cloudinary and SMTP variables as deployment secrets. Add `REDIS_URL` only when a Redis service is provisioned.
 - Configure a health check at `/api/health/ready`. The API shuts down its database and queue connections on termination.
 - Run the seed command once as a release/setup step, not on each server start. Restrict the initial Super Admin bootstrap variables to that setup run.
+
+For browser authentication, use a custom domain with sibling subdomains such as `www.example.com` for Vercel and `api.example.com` for Railway. Set `COOKIE_SAME_SITE=lax`, `COOKIE_SECURE=true`, and set `FRONTEND_URL` and `CORS_ORIGINS` to the exact Vercel production origin. The frontend and API must use HTTPS. The Vercel project uses `frontend/` as its root directory, `npm run build` as its build command, `dist` as its output directory, and `VITE_API_URL=https://api.example.com/api`. The included `frontend/vercel.json` sends client-side routes to the React app.
+
+Keep the current development MongoDB URI in local `backend/.env`. Create a separate production database in MongoDB Atlas and set only the Railway service's `MONGODB_URI` to that URI. Run the explicit seed command against production once to create reference data and the initial Super Admin. Do not run the test-account seed on production.
+
+Railway production variables: `NODE_ENV`, `PORT` (Railway supplies this), `MONGODB_URI`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `JWT_ACCESS_EXPIRES_IN`, `JWT_REFRESH_EXPIRES_IN`, `JWT_ISSUER`, `JWT_AUDIENCE`, `COOKIE_SECURE`, `COOKIE_SAME_SITE`, `FRONTEND_URL`, `CORS_ORIGINS`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `MAX_UPLOAD_BYTES`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`, and `CONTACT_EMAIL`. Add `REDIS_URL` only if you provision Redis. Generate two distinct random JWT secrets (at least 32 characters). Keep bootstrap admin variables out of regular runtime settings; supply them only when running the initial seed.
 
 Before launch, verify cookie behavior across the chosen frontend/API hostnames, CORS origins, SMTP sender verification, MongoDB backups/restore, Cloudinary quotas, and Redis persistence. Take regular MongoDB Atlas backups and periodically verify restoration in a separate database. Keep production credentials in the hosting provider's secret manager and rotate them through deployment settings.
 

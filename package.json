@@ -11,6 +11,6 @@
     "build": "npm --prefix frontend run build",
     "lint": "npm --prefix frontend run lint && npm --prefix frontend exec eslint -- --config frontend/eslint.config.js backend/src",
     "test": "npm --prefix backend test",
-    "start:backend": "npm --prefix backend run start"
+    "start:backend": "npm --prefix backend run start:production"
   }
 }

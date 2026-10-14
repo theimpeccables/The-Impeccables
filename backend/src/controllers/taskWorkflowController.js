@@ -62,7 +62,26 @@ const visibleTask = async (task, auth) => {
 const signedFile = (file) => {
   const cloudinary = getCloudinary();
   const resourceType = file.fileType.startsWith('image/') ? 'image' : file.fileType.startsWith('video/') ? 'video' : 'raw';
-  const options = { secure: true, sign_url: true, type: 'authenticated', resource_type: resourceType, expires_at: Math.floor(Date.now() / 1000) + 900 };
+  const mediaFormat = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+    'video/mp4': 'mp4',
+    'video/quicktime': 'mov',
+  }[file.fileType];
+  const mediaIdHasLegacyExtension = resourceType !== 'raw' && /\.[a-z0-9]+$/i.test(file.filePath);
+  const deliveryFormat = mediaFormat || (mediaIdHasLegacyExtension ? file.filePath.split('.').pop() : undefined);
+  const options = {
+    secure: true,
+    sign_url: true,
+    type: 'authenticated',
+    resource_type: resourceType,
+    ...(resourceType !== 'raw' && deliveryFormat ? { format: deliveryFormat } : {}),
+    // Older uploads included their extension in the public ID. Preserve that
+    // literal ID and append the actual delivery format so Cloudinary resolves
+    // the same resource while those files are still in use.
+  };
   const url = cloudinary.url(file.filePath, options);
   const downloadUrl = cloudinary.url(file.filePath, { ...options, attachment: file.fileName });
   return { ...file, url, downloadUrl };
@@ -232,7 +251,8 @@ export const updateWorkflowTask = async (req, res) => {
 const uploadPrivate = async (file, task, userId) => {
   const ext = file.originalname.split('.').pop().replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'bin';
   const resourceType = file.mimetype.startsWith('image/') ? 'image' : file.mimetype.startsWith('video/') ? 'video' : 'raw';
-  const result = await new Promise((resolve, reject) => getCloudinary().uploader.upload_stream({ resource_type: resourceType, type: 'authenticated', public_id: `tasks/${task._id}/${userId}/${randomUUID()}.${ext}`, overwrite: false, use_filename: false }, (error, uploaded) => error ? reject(error) : resolve(uploaded)).end(file.buffer));
+  const publicId = `tasks/${task._id}/${userId}/${randomUUID()}${resourceType === 'raw' ? `.${ext}` : ''}`;
+  const result = await new Promise((resolve, reject) => getCloudinary().uploader.upload_stream({ resource_type: resourceType, type: 'authenticated', public_id: publicId, overwrite: false, use_filename: false }, (error, uploaded) => error ? reject(error) : resolve(uploaded)).end(file.buffer));
   return { publicId: result.public_id, resourceType };
 };
 
