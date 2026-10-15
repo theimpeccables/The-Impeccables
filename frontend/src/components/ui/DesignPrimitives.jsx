@@ -7,9 +7,9 @@ import { cn } from '../../utils/cn';
 export const UserAvatar = ({ user, className, fallbackClassName, ...props }) => {
   const name = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || user?.name || user?.email || 'Member';
   const initials = name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase();
-  return <Avatar className={cn('h-9 w-9 border border-white/10 bg-white/[.05]', className)} {...props}>
+  return <Avatar className={cn('h-9 w-9 shrink-0 overflow-hidden rounded-full border border-white/10 bg-white/[.05]', className)} {...props}>
     <AvatarImage src={user?.profilePhoto || user?.avatarUrl || user?.avatar || undefined} alt={name} />
-    <AvatarFallback className={fallbackClassName}>{initials}</AvatarFallback>
+    <AvatarFallback className={cn('rounded-full bg-gradient-to-br from-red-950 via-[#1c1114] to-[#101013] text-xs font-bold tracking-wide text-red-100 ring-1 ring-inset ring-red-400/20', fallbackClassName)}>{initials}</AvatarFallback>
   </Avatar>;
 };
 

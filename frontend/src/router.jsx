@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { createBrowserRouter, Outlet, useLocation } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -35,7 +35,6 @@ const NotificationsPage = lazy(() => import('./pages/dashboard/NotificationsPage
 const ContentAdminPage = lazy(() => import('./pages/dashboard/ContentAdminPage'));
 const AuditPage = lazy(() => import('./pages/dashboard/AuditPage'));
 const SystemSettingsPage = lazy(() => import('./pages/dashboard/SystemSettingsPage'));
-const ProfilePage = lazy(() => import('./pages/dashboard/ProfilePage'));
 const GroupsPage = lazy(() => import('./pages/dashboard/GroupsPage'));
 const lazyElement = (element) => <Suspense fallback={<div className="min-h-[50vh] animate-pulse bg-white/[.02]" aria-label="Loading page" />}>{element}</Suspense>;
 
@@ -144,7 +143,7 @@ export const router = createBrowserRouter([
       { path: 'groups/:groupId', element: lazyElement(<GroupsPage />) },
       { path: 'tasks', element: <TasksPage /> },
       { path: 'notifications', element: <NotificationsPage /> },
-      { path: 'profile', element: <ProfilePage /> },
+      { path: 'profile', element: <Navigate to="/dashboard/settings" replace /> },
       { path: 'content', element: <ProtectedRoute allowedRoles={['admin', 'super_admin']}><ContentAdminPage /></ProtectedRoute> },
       { path: 'audit', element: <ProtectedRoute allowedRoles={['super_admin']}><AuditPage /></ProtectedRoute> },
       { path: 'settings', element: <SystemSettingsPage /> },

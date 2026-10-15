@@ -23,7 +23,6 @@ export const NAV_LINKS = [
   { name: 'About', path: '/about' },
   { name: 'Domains', path: '/domains' },
   { name: 'Gallery', path: '/gallery' },
-  { name: 'Events', path: '/events' },
   { name: 'Team', path: '/team' },
 ];
 

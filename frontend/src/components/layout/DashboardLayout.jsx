@@ -18,8 +18,7 @@ import {
   Users,
   ListTodo,
   Settings,
-  UserRound,
-  CalendarDays,
+  ArrowLeft,
 } from 'lucide-react';
 import { ImpeccablesLogo } from '../common/ImpeccablesLogo';
 import NotificationBell from './NotificationBell';
@@ -52,16 +51,19 @@ export const DashboardLayout = () => {
     });
     navigate('/');
   };
+  const goBack = () => {
+    if (Number.isInteger(window.history.state?.idx) && window.history.state.idx > 0) navigate(-1);
+    else navigate('/dashboard');
+  };
 
   const navGroups = [
     { heading: 'Member', items: [
       { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
       { name: 'Meetings', path: '/dashboard/attendance', icon: CalendarCheck, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
       { name: 'Tasks', path: '/dashboard/tasks', icon: ListTodo, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
-      { name: 'Events', path: '/events', icon: CalendarDays, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
       { name: 'Groups', path: '/dashboard/groups', icon: Users, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
       { name: 'Announcements', path: '/announcements', icon: Megaphone, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
-      { name: 'Profile', path: '/dashboard/profile', icon: UserRound, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
+      { name: 'Settings', path: '/dashboard/settings', icon: Settings, roles: ['member', 'domain_admin', 'admin', 'super_admin'] },
     ] },
     { heading: 'Manage', items: [
       { name: 'Approvals', path: '/dashboard/approvals', icon: CheckSquare, badge: pendingApprovalsCount, roles: ['domain_admin', 'admin', 'super_admin'] },
@@ -69,13 +71,11 @@ export const DashboardLayout = () => {
     ] },
     { heading: 'Admin', items: [
       { name: 'Members', path: '/dashboard/members', icon: Users, roles: ['admin', 'super_admin'] },
-      { name: 'Leadership', path: '/dashboard/admin', icon: Shield, roles: ['admin', 'super_admin'] },
       { name: 'Audit history', path: '/dashboard/audit', icon: Shield, roles: ['super_admin'] },
-      { name: 'Settings', path: '/dashboard/settings', icon: Settings, roles: ['domain_admin', 'admin', 'super_admin'] },
     ] },
   ];
   const visibleGroups = navGroups.map((group) => ({ ...group, items: group.items.filter((item) => item.roles.includes(role)) })).filter((group) => group.items.length);
-  const routeLabels = { '/dashboard': 'Dashboard', '/dashboard/attendance': 'Meetings', '/dashboard/tasks': 'Tasks', '/dashboard/groups': 'Groups', '/dashboard/profile': 'Profile', '/dashboard/approvals': 'Approvals', '/dashboard/content': 'Content', '/dashboard/audit': 'Audit History', '/dashboard/settings': 'Settings', '/dashboard/members': 'Members', '/dashboard/admin': 'Leadership', '/dashboard/submit': 'Submit Work', '/dashboard/notifications': 'Notifications' };
+  const routeLabels = { '/dashboard': 'Dashboard', '/dashboard/attendance': 'Meetings', '/dashboard/tasks': 'Tasks', '/dashboard/groups': 'Groups', '/dashboard/approvals': 'Approvals', '/dashboard/content': 'Content', '/dashboard/audit': 'Audit History', '/dashboard/settings': 'Settings', '/dashboard/members': 'Members', '/dashboard/submit': 'Submit Work', '/dashboard/notifications': 'Notifications' };
   const activeItem = navGroups.flatMap((group) => group.items).find((item) => location.pathname === item.path || location.pathname.startsWith(`${item.path}/`));
   const pageName = routeLabels[location.pathname] || activeItem?.name || (location.pathname.startsWith('/meetings/') ? 'Meeting details' : location.pathname.startsWith('/tasks/') ? 'Task details' : 'Dashboard');
   const pageMotion = reduceMotion ? {} : { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: 0 }, transition: { duration: 0.2 } };
@@ -180,6 +180,9 @@ export const DashboardLayout = () => {
         {/* Top bar */}
         <header className="dashboard-topbar sticky top-0 z-30 flex h-[68px] items-center justify-between border-b border-white/[.07] px-4 backdrop-blur-xl sm:px-7">
           <div className="flex items-center gap-4">
+            <button type="button" onClick={goBack} aria-label="Go back" title="Go back" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[.04] text-gray-300 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50">
+              <ArrowLeft className="h-4 w-4" />
+            </button>
             <button
               onClick={() => setIsSidebarOpen(true)}
               className="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white"
@@ -198,7 +201,7 @@ export const DashboardLayout = () => {
 
           {/* Quick Role Preview Pill */}
           <div className="flex items-center gap-2.5"><NotificationBell />
-            <DropdownMenu><DropdownMenuTrigger aria-label="Open profile menu" className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"><UserAvatar user={user} className="h-9 w-9 border-white/15" /></DropdownMenuTrigger><DropdownMenuContent align="end" className="w-48"><DropdownMenuItem asChild><Link to="/dashboard/profile"><UserRound size={15} /> View Profile</Link></DropdownMenuItem><DropdownMenuItem asChild><Link to="/dashboard/settings"><Settings size={15} /> Settings</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onSelect={(event) => { event.preventDefault(); handleLogout(); }} className="text-red-200 focus:text-red-100"><LogOut size={15} /> Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
+            <DropdownMenu><DropdownMenuTrigger aria-label="Open account menu" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-400/25 bg-white/[.04] p-0.5 shadow-[0_0_16px_rgba(255,42,42,.08)] outline-none transition hover:border-red-400/50 hover:shadow-[0_0_20px_rgba(255,42,42,.18)] focus-visible:ring-2 focus-visible:ring-red-500/50"><UserAvatar user={user} className="h-full w-full border-red-300/25" /></DropdownMenuTrigger><DropdownMenuContent align="end" className="w-48"><DropdownMenuItem asChild><Link to="/dashboard/settings"><Settings size={15} /> Settings</Link></DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onSelect={(event) => { event.preventDefault(); handleLogout(); }} className="text-red-200 focus:text-red-100"><LogOut size={15} /> Logout</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
           </div>
         </header>
 

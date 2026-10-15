@@ -12,7 +12,7 @@ const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
 const ACCEPTED_PHOTO_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const emptyForm = { firstName: '', lastName: '', phone: '', year: '', branch: '', bio: '' };
 
-const ProfilePage = () => {
+const ProfilePage = ({ embedded = false }) => {
   const dispatch = useDispatch();
   const { user, token, role } = useSelector((state) => state.auth);
   const [form, setForm] = useState(emptyForm);
@@ -106,12 +106,12 @@ const ProfilePage = () => {
     } finally { setSaving(false); }
   };
 
-  if (loading) return <main className="profile-page mx-auto max-w-4xl space-y-6"><Skeleton className="h-12 w-56" /><Skeleton className="h-36 w-full" /><Skeleton className="h-80 w-full" /></main>;
+  if (loading) return <div className={`${embedded ? '' : 'profile-page mx-auto max-w-4xl'} space-y-6`}><Skeleton className="h-12 w-56" /><Skeleton className="h-36 w-full" /><Skeleton className="h-80 w-full" /></div>;
 
   const displayedPhoto = photoPreview || user?.profilePhoto || user?.avatar;
   const domainNames = profile?.domains?.map((domain) => domain.name).filter(Boolean).join(', ') || 'Not assigned';
-  return <main className="profile-page mx-auto max-w-4xl space-y-6 text-gray-100">
-    <header className="profile-hero"><p className="eyebrow">Your account</p><h1 className="mt-2 text-3xl font-bold text-white">Profile</h1><p className="mt-2 text-sm text-gray-400">Keep your contact and member details up to date.</p></header>
+  return <div className={`${embedded ? 'space-y-4' : 'profile-page mx-auto max-w-4xl space-y-6'} text-gray-100`}>
+    {embedded ? <h2 className="text-lg font-semibold text-white">Profile information</h2> : <header className="profile-hero"><p className="eyebrow">Your account</p><h1 className="mt-2 text-3xl font-bold text-white">Profile</h1><p className="mt-2 text-sm text-gray-400">Keep your contact and member details up to date.</p></header>}
     <Card className="profile-photo-card flex flex-wrap items-center gap-5 p-5">
       <label className="group relative block h-24 w-24 cursor-pointer rounded-full focus-within:ring-2 focus-within:ring-[#ff2a2a]/50" title="Choose profile photo">
         {displayedPhoto ? <img src={displayedPhoto} alt="Profile preview" className="h-24 w-24 rounded-full border border-white/15 object-cover" /> : <span className="flex h-24 w-24 items-center justify-center rounded-full border border-white/15 bg-white/[.04] text-gray-400"><UserRound size={30} /></span>}
@@ -132,6 +132,6 @@ const ProfilePage = () => {
       <label className="text-xs text-gray-400 sm:col-span-2">Short bio<Textarea maxLength={1000} rows={4} value={form.bio} onChange={(event) => setForm((current) => ({ ...current, bio: event.target.value }))} /></label>
       <div className="sm:col-span-2"><Button type="submit" isLoading={saving}>Save changes</Button></div>
     </form></Card>
-  </main>;
+  </div>;
 };
 export default ProfilePage;

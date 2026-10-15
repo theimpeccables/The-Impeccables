@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMobileNav, setMobileNavOpen } from '../../store/slices/uiSlice';
 import { logout } from '../../store/slices/authSlice';
-import { Search, Menu, X, LayoutDashboard, LogOut } from 'lucide-react';
+import { Search, Menu, X, LayoutDashboard, LogOut, ArrowLeft } from 'lucide-react';
 import { ImpeccablesLogo } from '../common/ImpeccablesLogo';
 import { NAV_LINKS } from '../../constants';
 import { cn } from '../../utils/cn';
@@ -22,6 +22,10 @@ export const Navbar = () => {
     clearAccessToken();
     dispatch(logout());
     navigate('/', { replace: true });
+  };
+  const goBack = () => {
+    if (Number.isInteger(window.history.state?.idx) && window.history.state.idx > 0) navigate(-1);
+    else navigate('/', { replace: true });
   };
 
   return (
@@ -42,25 +46,26 @@ export const Navbar = () => {
           isHome ? 'min-h-[3.5rem] gap-3 py-2 sm:min-h-[3.75rem]' : 'min-h-[4rem] py-2'
         )}>
           
-          {/* Brand Logo with Red Wings */}
-          <Link
-            to="/"
-            onClick={() => dispatch(setMobileNavOpen(false))}
-            className="flex items-center gap-3 group select-none shrink-0"
-          >
-            <ImpeccablesLogo className={cn(
-              'shrink-0 transition-transform group-hover:scale-105',
-              isHome ? 'h-8 w-9 sm:h-9 sm:w-10' : 'h-8 w-9 sm:h-9 sm:w-10'
-            )} />
-            <span className={cn(
-              'whitespace-nowrap transition-colors group-hover:text-red-400',
-              isHome
-                ? 'text-[10px] font-medium tracking-[0.08em] text-white sm:text-[11px]'
-                : 'text-xs font-black uppercase tracking-tight text-white sm:text-sm'
-            )}>
-              {isHome ? <>THE <strong className="font-black">IMPECCABLES</strong></> : 'THE IMPECCABLES'}
-            </span>
-          </Link>
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            {!isHome && <button type="button" onClick={goBack} aria-label="Go back" title="Go back" className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[.04] text-gray-300 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50">
+              <ArrowLeft className="h-4 w-4" />
+            </button>}
+            <Link
+              to="/"
+              onClick={() => dispatch(setMobileNavOpen(false))}
+              className="group flex select-none items-center gap-3"
+            >
+              <ImpeccablesLogo className="h-8 w-9 shrink-0 transition-transform group-hover:scale-105 sm:h-9 sm:w-10" />
+              <span className={cn(
+                'whitespace-nowrap transition-colors group-hover:text-red-400',
+                isHome
+                  ? 'text-[10px] font-medium tracking-[0.08em] text-white sm:text-[11px]'
+                  : 'text-xs font-black uppercase tracking-tight text-white sm:text-sm'
+              )}>
+                {isHome ? <>THE <strong className="font-black">IMPECCABLES</strong></> : 'THE IMPECCABLES'}
+              </span>
+            </Link>
+          </div>
 
           {/* Center Navigation Pill Bar */}
           <nav className={cn(
