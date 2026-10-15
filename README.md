@@ -104,9 +104,9 @@ The GitHub Actions workflow runs these checks on pushes and pull requests. Tests
 
 - Import the repository and set the project root to `frontend`.
 - Build command: `npm run build`; output directory: `dist`.
-- Set `VITE_API_URL` to the deployed API's `/api` URL.
-- Configure SPA rewrites so nested React Router paths serve `index.html`.
-- Add the Vercel production and preview origins to the backend `CORS_ORIGINS` allowlist.
+- In Vercel Project Settings → Environment Variables, set `VITE_API_URL=/api` for Production (and Preview if you use preview deployments). This sends API calls through the included Vercel rewrite to `https://the-impeccables-2.onrender.com/api` while keeping the browser request on your Vercel site origin.
+- The included `frontend/vercel.json` proxies `/api/*` to Render and then sends other paths to the React app for client-side routing. Keep the API rewrite before the SPA fallback.
+- After the first Vercel deployment, copy its exact Production URL (for example, `https://your-project.vercel.app`) into Render's `FRONTEND_URL` and `CORS_ORIGINS`. Use the production URL only; add a Preview URL to `CORS_ORIGINS` only when you need authenticated preview testing. Do not use `*`.
 
 ### API on Render
 
@@ -118,11 +118,11 @@ The GitHub Actions workflow runs these checks on pushes and pull requests. Tests
 - Choose a paid web service plan for a production API that should stay warm. Render's Free web services spin down after 15 minutes without inbound traffic and can take about a minute to wake up.
 - Run the seed command once against production to initialize reference data and the initial Super Admin, not on every server start. Keep bootstrap Super Admin variables limited to that one-off run.
 
-For browser authentication, use sibling custom domains such as `www.example.com` for Vercel and `api.example.com` for Render. Set `COOKIE_SAME_SITE=lax`, `COOKIE_SECURE=true`, and set `FRONTEND_URL` and `CORS_ORIGINS` to the exact Vercel production origin. The frontend and API must use HTTPS. The Vercel project uses `frontend/` as its root directory, `npm run build` as its build command, `dist` as its output directory, and `VITE_API_URL=https://api.example.com/api`. The included `frontend/vercel.json` sends client-side routes to the React app.
+For the current `*.vercel.app` frontend and `*.onrender.com` backend, keep `COOKIE_SAME_SITE=lax` and `COOKIE_SECURE=true`. The Vercel rewrite makes browser API requests same-origin, so the refresh cookie can be used without relying on cross-site cookies. If you later remove the proxy and call Render directly, use custom sibling domains such as `www.example.com` and `api.example.com` for reliable cookie authentication; set `VITE_API_URL=https://api.example.com/api` in that setup.
 
 Keep the current development MongoDB URI in local `backend/.env`. Create a separate production database in MongoDB Atlas and set only Render's `MONGODB_URI` to that URI. Run the explicit seed command against production once to create reference data and the initial Super Admin. Do not run the test-account seed on production.
 
-Render production variables: `NODE_ENV`, `MONGODB_URI`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `COOKIE_SECURE`, `COOKIE_SAME_SITE`, `FRONTEND_URL`, `CORS_ORIGINS`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`, and `CONTACT_EMAIL`. Set `MAX_UPLOAD_BYTES=52428800`; Render supplies `PORT`. Add `REDIS_URL` only if you provision Redis. Generate two distinct random JWT secrets (at least 32 characters). Keep bootstrap admin variables out of regular runtime settings; supply them only when running the initial seed.
+Render production variables: `NODE_ENV=production`, `MONGODB_URI` (your separate production database), `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `COOKIE_SECURE=true`, `COOKIE_SAME_SITE=lax`, `FRONTEND_URL` (the exact Vercel Production URL), `CORS_ORIGINS` (the same exact URL, comma-separated only if allowing additional origins), `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`, and `CONTACT_EMAIL`. Set `MAX_UPLOAD_BYTES=52428800`; Render supplies `PORT`. Add `REDIS_URL` only if you provision Redis. Generate two distinct random JWT secrets (at least 32 characters). Keep bootstrap admin variables out of regular runtime settings; supply them only when running the initial seed. `VITE_API_URL` belongs in Vercel, not Render.
 
 Before launch, verify cookie behavior across the chosen frontend/API hostnames, CORS origins, SMTP sender verification, MongoDB backups/restore, Cloudinary quotas, and Redis persistence. Take regular MongoDB Atlas backups and periodically verify restoration in a separate database. Keep production credentials in the hosting provider's secret manager and rotate them through deployment settings.
 
