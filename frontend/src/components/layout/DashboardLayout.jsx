@@ -19,6 +19,7 @@ import {
   ListTodo,
   Settings,
   ArrowLeft,
+  Cake,
 } from 'lucide-react';
 import { ImpeccablesLogo } from '../common/ImpeccablesLogo';
 import NotificationBell from './NotificationBell';
@@ -68,6 +69,7 @@ export const DashboardLayout = () => {
     { heading: 'Manage', items: [
       { name: 'Approvals', path: '/dashboard/approvals', icon: CheckSquare, badge: pendingApprovalsCount, roles: ['domain_admin', 'admin', 'super_admin'] },
       { name: 'Content', path: '/dashboard/content', icon: Megaphone, roles: ['admin', 'super_admin'] },
+      { name: 'Birthdays', path: '/automation/birthdays', icon: Cake, roles: ['admin', 'super_admin'] },
     ] },
     { heading: 'Admin', items: [
       { name: 'Members', path: '/dashboard/members', icon: Users, roles: ['admin', 'super_admin'] },

@@ -36,6 +36,7 @@ const ContentAdminPage = lazy(() => import('./pages/dashboard/ContentAdminPage')
 const AuditPage = lazy(() => import('./pages/dashboard/AuditPage'));
 const SystemSettingsPage = lazy(() => import('./pages/dashboard/SystemSettingsPage'));
 const GroupsPage = lazy(() => import('./pages/dashboard/GroupsPage'));
+const BirthdayAutomationPage = lazy(() => import('./pages/dashboard/BirthdayAutomationPage'));
 const lazyElement = (element) => <Suspense fallback={<div className="min-h-[50vh] animate-pulse bg-white/[.02]" aria-label="Loading page" />}>{element}</Suspense>;
 
 // Public Shell Layout
@@ -106,6 +107,12 @@ export const router = createBrowserRouter([
       { path: '/forgot-password', element: lazyElement(<ForgotPassword />) },
       { path: '/reset-password', element: lazyElement(<ResetPassword />) },
     ],
+  },
+  {
+    path: '/automation/birthdays',
+    element: <ProtectedRoute allowedRoles={['admin', 'super_admin']}>{lazyElement(<DashboardLayout />)}</ProtectedRoute>,
+    errorElement: <RouteErrorBoundary />,
+    children: [{ index: true, element: lazyElement(<BirthdayAutomationPage />) }],
   },
   {
     path: '/meetings/:meetingId',

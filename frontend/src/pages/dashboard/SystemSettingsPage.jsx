@@ -12,14 +12,12 @@ import PasswordInput from '../../components/ui/PasswordInput';
 import ProfilePage from './ProfilePage';
 
 const PREFERENCES = [
-  ['emailBirthday', 'Birthday updates'],
   ['emailTasks', 'Task updates'],
   ['emailApprovals', 'Submission updates'],
   ['emailAnnouncements', 'Announcements'],
   ['inAppAll', 'In-app notifications'],
 ];
 const AUTOMATIONS = [
-  ['automation.birthdays.enabled', 'Birthday notices', 'Send birthday notifications and email when configured.'],
   ['automation.eventReminders.enabled', 'Event reminders', 'Notify members about published events happening within 24 hours.'],
   ['automation.weeklyReports.enabled', 'Weekly reports', 'Generate and email the weekly club report.'],
 ];

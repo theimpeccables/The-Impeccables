@@ -5,12 +5,13 @@ import api, { apiErrorMessage } from '../../services/api';
 import { setCredentials } from '../../store/slices/authSlice';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import { Input, Skeleton, Textarea } from '../../components/ui/Primitives';
+import { Input, Skeleton, Switch, Textarea } from '../../components/ui/Primitives';
 import { notify } from '../../utils/notify';
 
 const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
 const ACCEPTED_PHOTO_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
-const emptyForm = { firstName: '', lastName: '', phone: '', year: '', branch: '', bio: '' };
+const dateInputValue = (value) => value ? new Date(value).toISOString().slice(0, 10) : '';
+const emptyForm = { firstName: '', lastName: '', phone: '', year: '', branch: '', bio: '', dateOfBirth: '', birthdayEmailOptOut: false, showBirthdayToClub: true };
 
 const ProfilePage = ({ embedded = false }) => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const ProfilePage = ({ embedded = false }) => {
       if (!active) return;
       const result = data.data;
       setProfile(result.profile);
-      setForm({ firstName: result.user.firstName || '', lastName: result.user.lastName || '', phone: result.user.phone || '', year: result.profile?.year ? String(result.profile.year) : '', branch: result.profile?.branch || '', bio: result.profile?.bio || '' });
+      setForm({ firstName: result.user.firstName || '', lastName: result.user.lastName || '', phone: result.user.phone || '', year: result.profile?.year ? String(result.profile.year) : '', branch: result.profile?.branch || '', bio: result.profile?.bio || '', dateOfBirth: dateInputValue(result.user.dateOfBirth), birthdayEmailOptOut: Boolean(result.user.birthdayEmailOptOut), showBirthdayToClub: result.user.showBirthdayToClub !== false });
       dispatch(setCredentials({ user: result.user, accessToken: token }));
     }).catch((error) => {
       if (active) notify({ type: 'error', title: 'Profile unavailable', message: apiErrorMessage(error, 'Unable to load your profile.') });
@@ -58,7 +59,7 @@ const ProfilePage = ({ embedded = false }) => {
     const { data } = await api.get('/members/me');
     const result = data.data;
     setProfile(result.profile);
-    setForm({ firstName: result.user.firstName || '', lastName: result.user.lastName || '', phone: result.user.phone || '', year: result.profile?.year ? String(result.profile.year) : '', branch: result.profile?.branch || '', bio: result.profile?.bio || '' });
+    setForm({ firstName: result.user.firstName || '', lastName: result.user.lastName || '', phone: result.user.phone || '', year: result.profile?.year ? String(result.profile.year) : '', branch: result.profile?.branch || '', bio: result.profile?.bio || '', dateOfBirth: dateInputValue(result.user.dateOfBirth), birthdayEmailOptOut: Boolean(result.user.birthdayEmailOptOut), showBirthdayToClub: result.user.showBirthdayToClub !== false });
     updateUser(result.user);
   };
 
@@ -66,7 +67,7 @@ const ProfilePage = ({ embedded = false }) => {
     event.preventDefault();
     setSaving(true);
     try {
-      const payload = Object.fromEntries(Object.entries({ firstName: form.firstName, lastName: form.lastName, phone: form.phone, year: form.year ? Number(form.year) : undefined, branch: form.branch, bio: form.bio }).filter(([, value]) => value !== undefined && value !== null && value !== ''));
+      const payload = Object.fromEntries(Object.entries({ firstName: form.firstName, lastName: form.lastName, phone: form.phone, year: form.year ? Number(form.year) : undefined, branch: form.branch, bio: form.bio, dateOfBirth: form.dateOfBirth || null, birthdayEmailOptOut: form.birthdayEmailOptOut, showBirthdayToClub: form.showBirthdayToClub }).filter(([, value]) => value !== undefined && value !== ''));
       await api.put('/members/me', payload);
       await refreshProfile();
       notify({ type: 'success', title: 'Changes saved', message: 'Your profile has been updated.' });
@@ -129,6 +130,11 @@ const ProfilePage = ({ embedded = false }) => {
       <label className="text-xs text-gray-400">Domain<Input disabled value={domainNames} /></label>
       <label className="text-xs text-gray-400">Year of study<Input type="number" min="1" max="8" value={form.year} onChange={(event) => setForm((current) => ({ ...current, year: event.target.value }))} /></label>
       <label className="text-xs text-gray-400">Branch<Input maxLength={100} value={form.branch} onChange={(event) => setForm((current) => ({ ...current, branch: event.target.value }))} /></label>
+      <label className="text-xs text-gray-400">Date of birth<Input type="date" value={form.dateOfBirth} onChange={(event) => setForm((current) => ({ ...current, dateOfBirth: event.target.value }))} /></label>
+      <div className="flex flex-col justify-center gap-3 rounded-xl border border-white/10 bg-white/[.03] px-4 py-3 sm:col-span-2 sm:flex-row sm:justify-between">
+        <label className="flex items-center justify-between gap-4 text-sm text-gray-300">Don’t send me birthday emails<Switch checked={form.birthdayEmailOptOut} onCheckedChange={(checked) => setForm((current) => ({ ...current, birthdayEmailOptOut: checked }))} aria-label="Don't send me birthday emails" /></label>
+        <label className="flex items-center justify-between gap-4 text-sm text-gray-300">Show my birthday to the club<Switch checked={form.showBirthdayToClub} onCheckedChange={(checked) => setForm((current) => ({ ...current, showBirthdayToClub: checked }))} aria-label="Show my birthday to the club" /></label>
+      </div>
       <label className="text-xs text-gray-400 sm:col-span-2">Short bio<Textarea maxLength={1000} rows={4} value={form.bio} onChange={(event) => setForm((current) => ({ ...current, bio: event.target.value }))} /></label>
       <div className="sm:col-span-2"><Button type="submit" isLoading={saving}>Save changes</Button></div>
     </form></Card>
