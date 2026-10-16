@@ -9,7 +9,7 @@ export const createNotification = async ({ recipient, type = 'system', title, me
   return Notification.create({ recipient, type, title, message, href, relatedModel, relatedId });
 };
 
-export const sendTrackedEmail = async ({ to, subject, text, html, replyTo, idempotencyKey, template = 'general' }) => {
+export const sendTrackedEmail = async ({ to, subject, text, html, replyTo, cc, idempotencyKey, template = 'general' }) => {
   if (!idempotencyKey) throw new TypeError('Tracked email requires an idempotency key.');
   let log;
   try {
@@ -27,7 +27,7 @@ export const sendTrackedEmail = async ({ to, subject, text, html, replyTo, idemp
     if (!log) return { inProgress: true };
   }
   try {
-    const result = await sendEmail({ to, subject, text, html, replyTo });
+    const result = await sendEmail({ to, subject, text, html, replyTo, cc });
     await EmailLog.updateOne({ _id: log._id }, { $set: { status: 'sent', providerMessageId: result.messageId, sentAt: new Date(), lastErrorCode: '' } });
     return { alreadySent: false, messageId: result.messageId };
   } catch (error) {

@@ -68,6 +68,8 @@ export const env = Object.freeze({
   }),
   contactEmail: process.env.CONTACT_EMAIL || '',
   redisUrl: process.env.REDIS_URL || '',
+  cronSecret: process.env.CRON_SECRET || '',
+  birthdayDailyCap: parsePositiveInteger(process.env.BIRTHDAY_DAILY_CAP, 'BIRTHDAY_DAILY_CAP', 300),
   superAdminEmail: process.env.SUPER_ADMIN_EMAIL || '',
   superAdminPassword: process.env.SUPER_ADMIN_PASSWORD || '',
 });

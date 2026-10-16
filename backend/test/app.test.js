@@ -57,3 +57,24 @@ test('group, meeting and task write endpoints reject unauthenticated requests', 
     assert.equal(body.error.code, 'AUTHENTICATION_REQUIRED');
   }
 });
+
+test('birthday control APIs reject unauthenticated access and writes', async (t) => {
+  const server = createServer(createApp());
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  t.after(() => new Promise((resolve) => server.close(resolve)));
+  const origin = `http://127.0.0.1:${server.address().port}/api/automation/birthdays`;
+  const attempts = await Promise.all([
+    fetch(`${origin}/settings`),
+    fetch(`${origin}/status`),
+    fetch(`${origin}/upcoming?days=30`),
+    fetch(`${origin}/logs`),
+    fetch(`${origin}/settings`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ enabled: true }) }),
+    fetch(`${origin}/test`, { method: 'POST' }),
+    fetch(`${origin}/run-now`, { method: 'POST' }),
+  ]);
+  for (const response of attempts) {
+    const body = await response.json();
+    assert.equal(response.status, 401);
+    assert.equal(body.error.code, 'AUTHENTICATION_REQUIRED');
+  }
+});

@@ -34,12 +34,14 @@ export const getMyProfile = async (req, res) => {
 
 export const updateMyProfile = async (req, res) => {
   const fields = matchedData(req, { locations: ['body'] });
-  const { firstName, lastName, phone, dateOfBirth, ...profileFields } = fields;
+  const { firstName, lastName, phone, dateOfBirth, birthdayEmailOptOut, showBirthdayToClub, ...profileFields } = fields;
   if (firstName !== undefined) req.user.firstName = firstName;
   if (lastName !== undefined) req.user.lastName = lastName;
   if (phone !== undefined) req.user.phone = phone;
-  if (dateOfBirth !== undefined) req.user.dateOfBirth = dateOfBirth;
-  if (firstName !== undefined || lastName !== undefined || phone !== undefined || dateOfBirth !== undefined) await req.user.save();
+  if (dateOfBirth !== undefined) req.user.dateOfBirth = dateOfBirth ? new Date(`${dateOfBirth}T00:00:00.000Z`) : null;
+  if (birthdayEmailOptOut !== undefined) req.user.birthdayEmailOptOut = birthdayEmailOptOut;
+  if (showBirthdayToClub !== undefined) req.user.showBirthdayToClub = showBirthdayToClub;
+  if (firstName !== undefined || lastName !== undefined || phone !== undefined || dateOfBirth !== undefined || birthdayEmailOptOut !== undefined || showBirthdayToClub !== undefined) await req.user.save();
 
   const profile = await MemberProfile.findOneAndUpdate(
     { userId: req.user._id },
@@ -145,7 +147,13 @@ export const getMember = async (req, res) => {
   if (!user) return res.status(404).json({ success: false, error: { code: 'MEMBER_NOT_FOUND', message: 'Member not found.' } });
   const profile = await MemberProfile.findOne({ userId: user._id }).populate('domains', 'name slug');
   const context = await getUserContext(user._id);
-  return res.json({ success: true, data: { user: toPublicUser(user, context), profile } });
+  const publicUser = toPublicUser(user, context);
+  if (!isSelf) {
+    delete publicUser.dateOfBirth;
+    delete publicUser.birthdayEmailOptOut;
+    delete publicUser.showBirthdayToClub;
+  }
+  return res.json({ success: true, data: { user: publicUser, profile } });
 };
 
 export const updateMember = async (req, res) => {

@@ -23,7 +23,7 @@ const getTransporter = () => {
   return transporter;
 };
 
-export const sendEmail = async ({ to, subject, text, html, replyTo }) => {
+export const sendEmail = async ({ to, subject, text, html, replyTo, cc }) => {
   if (!to || !subject || (!text && !html)) {
     throw new TypeError('Email requires a recipient, subject, and text or HTML body.');
   }
@@ -34,6 +34,7 @@ export const sendEmail = async ({ to, subject, text, html, replyTo }) => {
     text,
     html,
     replyTo,
+    ...(cc?.length ? { cc } : {}),
   });
   return { messageId: result.messageId, accepted: result.accepted, rejected: result.rejected };
 };

@@ -29,7 +29,16 @@ router.put('/me', requireAuth,
   name('firstName', 60),
   name('lastName', 60),
   body('phone').optional().isString().trim().isLength({ max: 32 }),
-  body('dateOfBirth').optional({ values: 'null' }).isISO8601().toDate(),
+  body('dateOfBirth').optional({ values: 'undefined' }).custom((value) => {
+    if (value === null || value === '') return true;
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new Error('Use a date in YYYY-MM-DD format.');
+    const [year, month, day] = value.split('-').map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    if (date.getUTCFullYear() !== year || date.getUTCMonth() + 1 !== month || date.getUTCDate() !== day) throw new Error('Enter a valid date.');
+    return true;
+  }),
+  body('birthdayEmailOptOut').optional().isBoolean().toBoolean(),
+  body('showBirthdayToClub').optional().isBoolean().toBoolean(),
   body('rollNumber').optional().isString().trim().isLength({ max: 40 }),
   body('branch').optional().isString().trim().isLength({ max: 100 }),
   body('year').optional({ values: 'null' }).isInt({ min: 1, max: 8 }).toInt(),

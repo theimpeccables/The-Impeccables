@@ -21,6 +21,7 @@ import attendanceRoutes from './routes/attendanceRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import groupRoutes from './routes/groupRoutes.js';
+import birthdayRoutes from './routes/birthdayRoutes.js';
 import { getAutomationHealth } from './services/automationService.js';
 
 export const createApp = () => {
@@ -101,6 +102,7 @@ export const createApp = () => {
   app.use(`${env.apiPrefix}/auth`, authRoutes);
   app.use(`${env.apiPrefix}/members`, memberRoutes);
   app.use(`${env.apiPrefix}/groups`, groupRoutes);
+  app.use(`${env.apiPrefix}/automation/birthdays`, birthdayRoutes);
   app.use(`${env.apiPrefix}/roles`, roleRoutes);
   app.use(`${env.apiPrefix}/domains`, domainRoutes);
   // New task workflow routes must run before the legacy task handlers.

@@ -19,6 +19,8 @@ const userSchema = new mongoose.Schema({
   profilePhotoPublicId: { type: String, select: false, default: '' },
   phone: { type: String, trim: true, maxlength: 32, default: '' },
   dateOfBirth: { type: Date, default: null },
+  birthdayEmailOptOut: { type: Boolean, default: false },
+  showBirthdayToClub: { type: Boolean, default: true },
   isActive: { type: Boolean, default: true, index: true },
   lastLoginAt: { type: Date, default: null },
   passwordResetTokenHash: { type: String, select: false, default: undefined },

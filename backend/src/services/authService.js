@@ -86,6 +86,8 @@ export const toPublicUser = (user, context) => ({
   profilePhoto: photoWithVersion(user),
   phone: user.phone || '',
   dateOfBirth: user.dateOfBirth || null,
+  birthdayEmailOptOut: Boolean(user.birthdayEmailOptOut),
+  showBirthdayToClub: user.showBirthdayToClub !== false,
   role: context.role,
   roles: context.roles,
   permissions: context.permissions,
